@@ -4,6 +4,7 @@ from aiogram import types
 from dispatcher import dp
 from random import uniform, randint
 from pay import init_pay
+from aiogram.utils.exceptions import Throttled
 from give import init_give
 import config, database
 
@@ -11,14 +12,19 @@ import config, database
 # Создание счёта, доступно тоже для всех
 @dp.message_handler(commands=['start'], is_private=True)
 async def check_balance(message: types.Message):
-    if database.PostSQL(message).check_user():
-        await message.reply("Твой баланс: %d COINS" % database.PostSQL(message).get_balance())
+    try:
+        await dp.throttle('throttle_all', rate=2)
+    except Throttled:
+        await message.reply('Too many requests!')
     else:
-        database.PostSQL(message).add_user()
-        database.PostSQL(message).modify_balance(config.START_BALANCE)
-        await message.reply("Привет %s, твой счёт успешно создан. Также тебе было начислено %d COINS!" % (
-            message.from_user.first_name, config.START_BALANCE
-        ))
+        if database.PostSQL(message).check_user():
+            await message.reply("Твой баланс: %d COINS" % database.PostSQL(message).get_balance())
+        else:
+            database.PostSQL(message).add_user()
+            database.PostSQL(message).modify_balance(config.START_BALANCE)
+            await message.reply("Привет %s, твой счёт успешно создан. Также тебе было начислено %d COINS!" % (
+                message.from_user.first_name, config.START_BALANCE
+            ))
 
 
 @dp.message_handler(commands=['start'], is_group=True)
@@ -88,7 +94,7 @@ async def check_balance(message: types.Message):
 async def check_balance(message: types.Message):
     u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
     data = database.PostSQL(message).check_user(custom_user=u_)
-    x = await init_pay(message, s_, u_)
+    x = await init_give(message, s_, u_)
     if x:
         await message.reply("Для %s было выдано %d COINS!" % (
             data[1], s_
