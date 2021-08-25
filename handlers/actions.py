@@ -169,7 +169,7 @@ async def group_echo(message: types.Message):
             )
         except Exception as e:
             logging.error(e)
-        
+
         else:
             await message.answer(
                 "За активность в этой группе на баланс группы было зачисленно - %d COINS" % value_
