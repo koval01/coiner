@@ -154,8 +154,23 @@ async def check_balance(message: types.Message):
 async def group_echo(message: types.Message):
     if uniform(0, 1) >= 0.95:
         value_ = randint(1, 20)
+        value_for_user = randint(1, 5)
+
         database.PostSQL(message).modify_balance(value_)
-        await message.answer(
-            "За активность в этой группе на баланс было зачисленно - %d COINS" %
-            value_
-        )
+
+        try:
+            database.PostSQL(message).modify_balance(
+                value_for_user, custom_user=message.from_user.id,
+            )
+            await message.answer(
+                "За активность в этой группе на баланс группы было зачисленно - %d COINS"
+                "\nТакже случайному участнику %s - %d COINS" %
+                (value_, message.from_user.full_name, value_for_user)
+            )
+        except Exception as e:
+            logging.error(e)
+        
+        else:
+            await message.answer(
+                "За активность в этой группе на баланс группы было зачисленно - %d COINS" % value_
+            )
