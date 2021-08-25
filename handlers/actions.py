@@ -143,8 +143,8 @@ async def check_balance(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).get_top_balance()
         top_ = "\n".join(
-            ["<i>%s</i> <b>-</b> <code>%s</code> <b>COINS</b>" %
-            (i[0], human_format(int(i[1]))) for i in data]
+            ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>COINS</b>" %
+            (i+1, e[0], human_format(int(e[1]))) for i, e in enumerate(data)]
         )
         await message.reply(top_)
 
