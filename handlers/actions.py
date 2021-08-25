@@ -145,7 +145,7 @@ async def check_balance(message: types.Message):
             value_ = randint(1, 15) + randint(1, 15) +\
                      randint(1, 15) + randint(1, 15) +\
                      randint(1, 15) + randint(1, 15) +\
-                     randint(1, 15) * (randint(30, 500) / 4)
+                     randint(1, 15) * (randint(30, 500) / uniform(1.5, 5))
             database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
             await message.reply("Тебе выпало %d COINS!" % value_)
         else:
