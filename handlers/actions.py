@@ -137,6 +137,21 @@ async def check_balance(message: types.Message):
         await message.reply(config.BOT_FAQ)
 
 
+# Испытаем удачу
+@dp.message_handler(commands=['dice'])
+async def check_balance(message: types.Message):
+    if await throttling_all(message):
+        if uniform(0, 1) >= 0.92:
+            value_ = randint(1, 15) + randint(1, 15) +\
+                     randint(1, 15) + randint(1, 15) +\
+                     randint(1, 15) + randint(1, 15) +\
+                     randint(1, 15) * (randint(30, 500) / 4)
+            database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
+            await message.reply("Тебе выпало %d COINS!" % value_)
+        else:
+            await message.reply("Тебе не повезло. Ничего не выпало... :(")
+
+
 # Добавим и возможноть посмотреть кто там самый богатый
 @dp.message_handler(commands=['top'])
 async def check_balance(message: types.Message):
@@ -169,8 +184,6 @@ async def group_echo(message: types.Message):
             )
         except Exception as e:
             logging.error(e)
-
-        else:
             await message.answer(
                 "За активность в этой группе на баланс группы было зачисленно - %d COINS" % value_
             )
