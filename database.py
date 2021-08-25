@@ -58,6 +58,14 @@ class PostSQL:
         self.finish()
         return result[0][0]
 
+    def get_top_balance(self) -> int:
+        self.cursor.execute(
+            'select name, balance from wallet order by balance desc limit 20',
+        )
+        result = self.cursor.fetchall()
+        self.finish()
+        return result
+
     def modify_balance(self, coins, take=False, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
         if take: x = "-"

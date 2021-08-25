@@ -6,6 +6,7 @@ from random import uniform, randint
 from pay import init_pay
 from give import init_give
 from throttling import throttling_all
+from utils import human_format
 import config, database
 
 
@@ -134,6 +135,18 @@ async def check_balance(message: types.Message):
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         await message.reply(config.BOT_FAQ)
+
+
+# Добавим и возможноть посмотреть кто там самый богатый
+@dp.message_handler(commands=['top'])
+async def check_balance(message: types.Message):
+    if await throttling_all(message):
+        data = database.PostSQL(message).get_top_balance()
+        top_ = "\n".join(
+            ["<i>%s</i> <b>-</b> <code>%s</code> <b>COINS</b>" %
+            (i[0], human_format(int(i[1]))) for i in data]
+        )
+        await message.reply(top_)
 
 
 # Слушаем группу, и выдаём для группы вознаграждение за актив
