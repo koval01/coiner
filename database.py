@@ -24,7 +24,8 @@ class PostSQL:
         self.cursor.close()
         self.conn.close()
 
-    def check_user(self) -> list:
+    def check_user(self, custom_user=0) -> list:
+        if custom_user: self.user_id = custom_user
         try:
             self.cursor.execute(
                 'select * from wallet where user_id = %(user_id)s',
@@ -57,7 +58,8 @@ class PostSQL:
         self.finish()
         return result[0][0]
 
-    def modify_balance(self, coins, take=False) -> None:
+    def modify_balance(self, coins, take=False, custom_user=0) -> None:
+        if custom_user: self.user_id = custom_user
         if take: x = "-"
         else: x = "+"
         self.cursor.execute(
