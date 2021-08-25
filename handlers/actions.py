@@ -1,13 +1,15 @@
 import logging
+from random import uniform, randint
 
 from aiogram import types
+
+import config
+import database
 from dispatcher import dp
-from random import uniform, randint
-from pay import init_pay
 from give import init_give
+from pay import init_pay
 from throttling import throttling_all
 from utils import human_format
-import config, database
 
 
 # Создание счёта, доступно тоже для всех
@@ -187,3 +189,5 @@ async def group_echo(message: types.Message):
             await message.answer(
                 "За активность в этой группе на баланс группы было зачисленно - %d COINS" % value_
             )
+
+

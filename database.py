@@ -1,6 +1,8 @@
-from config import DB_HOST, DB_NAME, DB_PASS, DB_USER
+import logging
+import psycopg2
 from aiogram.types.message import Message
-import psycopg2, logging
+
+from config import DB_HOST, DB_NAME, DB_PASS, DB_USER
 
 
 class PostSQL:
@@ -76,3 +78,5 @@ class PostSQL:
         )
         self.conn.commit()
         self.finish()
+
+

@@ -1,6 +1,9 @@
+import database
+import logging
+
 from aiogram.types.message import Message
+
 from utils import get_name_, notify_
-import logging, database
 
 
 async def init_give(message: Message, sum_: int, user_: int) -> None:
@@ -27,3 +30,5 @@ async def init_give(message: Message, sum_: int, user_: int) -> None:
             ), user_)
 
     return True
+
+
