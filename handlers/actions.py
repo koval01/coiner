@@ -101,6 +101,12 @@ async def check_balance(message: types.Message):
     await message.reply("Недоступно!")
 
 
+# Немного информации о боте
+@dp.message_handler(commands=['info'])
+async def check_balance(message: types.Message):
+    await message.reply(config.BOT_INFO)
+
+
 # Слушаем группу, и выдаём для группы вознаграждение за актив
 @dp.message_handler(is_group=True)
 async def group_echo(message: types.Message):

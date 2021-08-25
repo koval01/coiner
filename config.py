@@ -9,3 +9,11 @@ DB_USER = os.environ.get("DB_USER", None)
 DB_PASS = os.environ.get("DB_PASS", None)
 
 START_BALANCE = 100
+
+BOT_INFO = """
+Этот бот был написан за один день, и не очень сложным. Цель этого бота - развлекать участников групп. 
+Участники могут собирать монеты, обмениваться ими, или же собирать их в кошельке группы.
+
+Разработчик: @koval_yaroslav
+Код этого бота: github.com/koval01/coiner
+"""
