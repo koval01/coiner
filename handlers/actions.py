@@ -117,6 +117,13 @@ async def check_balance(message: types.Message):
         await message.reply(config.BOT_INFO)
 
 
+# Ну и подсказки по боту
+@dp.message_handler(commands=['faq'])
+async def check_balance(message: types.Message):
+    if await throttling_all(message):
+        await message.reply(config.BOT_FAQ)
+
+
 # Слушаем группу, и выдаём для группы вознаграждение за актив
 @dp.message_handler(is_group=True)
 async def group_echo(message: types.Message):
