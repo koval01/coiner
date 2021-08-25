@@ -102,13 +102,17 @@ async def check_balance(message: types.Message):
 @dp.message_handler(commands=['give'], is_owner=True)
 async def check_balance(message: types.Message):
     if await throttling_all(message):
-        u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
-        data = database.PostSQL(message).check_user(custom_user=u_)
-        x = await init_give(message, s_, u_)
-        if x:
-            await message.reply("Для %s было выдано %d COINS!" % (
-                data[1], s_
-            ))
+        try:
+            u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
+            data = database.PostSQL(message).check_user(custom_user=u_)
+            x = await init_give(message, s_, u_)
+            if x:
+                await message.reply("Для %s было выдано %d COINS!" % (
+                    data[1], s_
+                ))
+        except Exception as e:
+            logging.debug(e)
+            await message.reply("/give *получатель* *сумма*")
 
 
 # Если у пользователя нет прав на эту команду
