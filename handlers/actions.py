@@ -27,7 +27,7 @@ async def check_balance(message: types.Message):
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         if database.PostSQL(message).check_user():
-            await message.reply("Баланс группы: %d COINS" % database.PostSQL(message).get_balance())
+            await message.reply("Баланс этой группы: %d COINS" % database.PostSQL(message).get_balance())
         else:
             database.PostSQL(message).add_user()
             database.PostSQL(message).modify_balance(config.START_BALANCE)
@@ -38,11 +38,19 @@ async def check_balance(message: types.Message):
 
 
 # Проверка баланса, работает без всяких ограничений
-@dp.message_handler(commands=['wallet'])
+@dp.message_handler(commands=['wallet'], is_private=True)
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
         await message.reply("Твой баланс: %d COINS\nНомер счёта: «%d»" % (data[2], data[3]))
+
+
+# И команда для групп конечно
+@dp.message_handler(commands=['wallet'], is_group=True)
+async def check_balance(message: types.Message):
+    if await throttling_all(message):
+        data = database.PostSQL(message).check_user()
+        await message.reply("Баланс группы: %d COINS\nНомер счёта группы: «%d»" % (data[2], data[3]))
 
 
 # Если вызвали из приватного чата
