@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.dispatcher.filters import BoundFilter
 import config
 
+
 class IsOwnerFilter(BoundFilter):
     """
     Custom filter "is_owner".
@@ -10,9 +11,10 @@ class IsOwnerFilter(BoundFilter):
 
     def __init__(self, is_owner):
         self.is_owner = is_owner
-    
+
     async def check(self, message: types.Message):
         return message.from_user.id == config.BOT_OWNER
+
 
 class IsAdminFilter(BoundFilter):
     """
@@ -28,6 +30,32 @@ class IsAdminFilter(BoundFilter):
         return member.is_chat_admin() == self.is_admin
 
 
+class IsPrivateFilter(BoundFilter):
+    """
+    Filter for private chat
+    """
+    key = "is_private"
+
+    def __init__(self, is_private: bool):
+        self.is_private = is_private
+
+    async def check(self, message: types.Message):
+        return message.chat.type == "private"
+
+
+class IsGroupFilter(BoundFilter):
+    """
+    Filter for group chat
+    """
+    key = "is_group"
+
+    def __init__(self, is_group: bool):
+        self.is_group = is_group
+
+    async def check(self, message: types.Message):
+        return message.chat.type in ["group", "supergroup"]
+
+
 class MemberCanRestrictFilter(BoundFilter):
     """
     Filter that checks member ability for restricting
@@ -40,5 +68,4 @@ class MemberCanRestrictFilter(BoundFilter):
     async def check(self, message: types.Message):
         member = await message.bot.get_chat_member(message.chat.id, message.from_user.id)
 
-        # I don't know why, but telegram thinks, if member is chat creator, he cant restrict member
         return (member.is_chat_creator() or member.can_restrict_members) == self.member_can_restrict
