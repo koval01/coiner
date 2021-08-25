@@ -9,6 +9,7 @@ from dispatcher import dp
 from give import init_give
 from pay import init_pay
 from throttling import throttling_all
+from .cleaner import cleaner_body
 from utils import human_format
 
 
@@ -53,7 +54,8 @@ async def check_balance(message: types.Message):
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
-        await message.reply("Баланс группы: %d COINS\nНомер счёта группы: «%d»" % (data[2], data[3]))
+        bot_msg = await message.reply("Баланс группы: %d COINS\nНомер счёта группы: «%d»" % (data[2], data[3]))
+        await cleaner_body(bot_msg)
 
 
 # Если вызвали из приватного чата
@@ -149,9 +151,10 @@ async def check_balance(message: types.Message):
                      randint(1, 15) + randint(1, 15) +\
                      randint(1, 15) * (randint(30, 500) / uniform(1.5, 5))
             database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
-            await message.reply("Тебе выпало %d COINS!" % value_)
+            bot_msg = await message.reply("Тебе выпало %d COINS!" % value_)
         else:
-            await message.reply("Тебе не повезло. Ничего не выпало... :(")
+            bot_msg = await message.reply("Тебе не повезло. Ничего не выпало... :(")
+        await cleaner_body(bot_msg)
 
 
 # Добавим и возможноть посмотреть кто там самый богатый
@@ -163,7 +166,8 @@ async def check_balance(message: types.Message):
             ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>COINS</b>" %
             (i+1, e[0], human_format(int(e[1]))) for i, e in enumerate(data)]
         )
-        await message.reply(top_)
+        bot_msg = await message.reply(top_)
+        await cleaner_body(bot_msg)
 
 
 # Слушаем группу, и выдаём для группы вознаграждение за актив

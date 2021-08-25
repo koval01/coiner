@@ -80,3 +80,54 @@ class PostSQL:
         self.finish()
 
 
+class PostSQL_ChatManager:
+    def __init__(self, msg: Message) -> None:
+        self.conn = psycopg2.connect(
+            dbname=DB_NAME, user=DB_USER,
+            password=DB_PASS, host=DB_HOST
+        )
+        self.cursor = self.conn.cursor()
+
+        if msg.chat.type in ["group", "supergroup"]:
+            self.chat_id = msg.chat.id
+            self.name = msg.chat.title
+            self.message_id = msg.message_id
+        elif msg.chat.type == "private":
+            return
+
+    def finish(self) -> None:
+        self.cursor.close()
+        self.conn.close()
+
+    def get_last_message(self) -> list:
+        self.cursor.execute(
+            'select chat_id, last_message_id from chat where chat_id = %(chat_id)s limit 1',
+            {'chat_id': self.chat_id}
+        )
+        result = self.cursor.fetchall()
+        self.finish()
+        return result[0]
+
+    def add_new_chat(self) -> None:
+        self.cursor.execute(
+            'insert into chat(chat_id, last_message_id) values (%(chat)s, %(last)s);',
+            {
+                'chat': self.chat_id,
+                'last': self.message_id,
+            }
+        )
+        self.conn.commit()
+        self.finish()
+
+    def modify_last(self) -> None:
+        self.cursor.execute(
+            'update chat set last_message_id = %(last)s where chat_id = %(chat)s',
+            {
+                'chat': self.chat_id,
+                'last': self.message_id,
+            },
+        )
+        self.conn.commit()
+        self.finish()
+
+
