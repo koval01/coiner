@@ -5,7 +5,7 @@ from dispatcher import dp
 
 async def throttling_all(msg: Message) -> bool:
     try:
-        await dp.throttle('throttle_all', rate=0.7)
+        await dp.throttle('throttle_all', rate=0.4)
     except Throttled:
         await msg.reply("Не флуди пожалуйста!")
         return False
