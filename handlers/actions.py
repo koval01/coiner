@@ -32,7 +32,7 @@ async def private_balance_create(message: Message, pass_check=False, cust_usr=0)
 @dp.message_handler(commands=['start'], is_private=True)
 async def check_balance(message: types.Message):
     if await throttling_all(message):
-        private_balance_create(messsage)
+        private_balance_create(message)
 
 
 @dp.message_handler(commands=['start'], is_group=True)
