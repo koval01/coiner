@@ -145,8 +145,8 @@ async def check_balance(message: types.Message):
 @dp.message_handler(commands=['dice'])
 async def check_balance(message: types.Message):
     if await throttling_all(message):
-        if uniform(0, 1) >= 0.60:
-            value_ = randint(1, 10) + (randint(30, 400) / uniform(2, 5))
+        if uniform(0, 1) >= 0.4:
+            value_ = randint(1, 10) + (randint(30, 200) / uniform(2, 5))
             database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
             bot_msg = await message.reply("Тебе выпало %d гривен!" % value_)
         else:
