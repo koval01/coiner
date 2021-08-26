@@ -18,11 +18,11 @@ from utils import human_format
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         if database.PostSQL(message).check_user():
-            await message.reply("Твой баланс: %d COINS" % database.PostSQL(message).get_balance())
+            await message.reply("Твой баланс: %d гривен" % database.PostSQL(message).get_balance())
         else:
             database.PostSQL(message).add_user()
             database.PostSQL(message).modify_balance(config.START_BALANCE)
-            await message.reply("Привет %s, твой счёт успешно создан. Также тебе было начислено %d COINS!" % (
+            await message.reply("Привет %s, твой счёт успешно создан. Также тебе было начислено %d гривен!" % (
                 message.from_user.first_name, config.START_BALANCE
             ))
 
@@ -31,12 +31,12 @@ async def check_balance(message: types.Message):
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         if database.PostSQL(message).check_user():
-            await message.reply("Баланс этой группы: %d COINS" % database.PostSQL(message).get_balance())
+            await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance())
         else:
             database.PostSQL(message).add_user()
             database.PostSQL(message).modify_balance(config.START_BALANCE)
             await message.reply(
-                "Счёт группы успешно создан. Также на баланс группы было начислено %d COINS!" %
+                "Счёт группы успешно создан. Также на баланс группы было начислено %d гривен!" %
                 config.START_BALANCE
             )
 
@@ -46,7 +46,7 @@ async def check_balance(message: types.Message):
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
-        await message.reply("Твой баланс: %d COINS\nНомер счёта: «%d»" % (data[2], data[3]))
+        await message.reply("Твой баланс: %d гривен\nНомер счёта: «%d»" % (data[2], data[3]))
 
 
 # И команда для групп конечно
@@ -54,7 +54,7 @@ async def check_balance(message: types.Message):
 async def check_balance(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
-        bot_msg = await message.reply("Баланс группы: %d COINS\nНомер счёта группы: «%d»" % (data[2], data[3]))
+        bot_msg = await message.reply("Баланс группы: %d гривен\nНомер счёта группы: «%d»" % (data[2], data[3]))
         await cleaner_body(bot_msg)
 
 
@@ -112,7 +112,7 @@ async def check_balance(message: types.Message):
             data = database.PostSQL(message).check_user(custom_user=u_)
             x = await init_give(message, s_, u_)
             if x:
-                await message.reply("Для %s было выдано %d COINS!" % (
+                await message.reply("Для %s было выдано %d гривен!" % (
                     data[1], s_
                 ))
         except Exception as e:
@@ -145,13 +145,10 @@ async def check_balance(message: types.Message):
 @dp.message_handler(commands=['dice'])
 async def check_balance(message: types.Message):
     if await throttling_all(message):
-        if uniform(0, 1) >= 0.92:
-            value_ = randint(1, 15) + randint(1, 15) +\
-                     randint(1, 15) + randint(1, 15) +\
-                     randint(1, 15) + randint(1, 15) +\
-                     randint(1, 15) * (randint(30, 500) / uniform(1.5, 5))
+        if uniform(0, 1) >= 0.60:
+            value_ = randint(1, 30) * (randint(30, 400) / uniform(1.5, 5))
             database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
-            bot_msg = await message.reply("Тебе выпало %d COINS!" % value_)
+            bot_msg = await message.reply("Тебе выпало %d гривен!" % value_)
         else:
             bot_msg = await message.reply("Тебе не повезло. Ничего не выпало... :(")
         await cleaner_body(bot_msg)
@@ -163,7 +160,7 @@ async def check_balance(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).get_top_balance()
         top_ = "\n".join(
-            ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>COINS</b>" %
+            ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b>" %
             (i+1, e[0], human_format(int(e[1]))) for i, e in enumerate(data)]
         )
         bot_msg = await message.reply(top_)
@@ -184,14 +181,14 @@ async def group_echo(message: types.Message):
                 value_for_user, custom_user=message.from_user.id,
             )
             await message.answer(
-                "За активность в этой группе на баланс группы было зачисленно - %d COINS"
-                "\nТакже случайному участнику %s - %d COINS" %
+                "За активность в этой группе на баланс группы было зачисленно - %d гривен"
+                "\nТакже случайному участнику %s - %d гривен" %
                 (value_, message.from_user.full_name, value_for_user)
             )
         except Exception as e:
             logging.error(e)
             await message.answer(
-                "За активность в этой группе на баланс группы было зачисленно - %d COINS" % value_
+                "За активность в этой группе на баланс группы было зачисленно - %d гривен" % value_
             )
 
 
