@@ -64,7 +64,7 @@ class PostSQL:
 
     def get_top_balance(self) -> int:
         self.cursor.execute(
-            'select name, balance from wallet order by balance desc limit 25',
+            'select name, balance, user_id from wallet order by balance desc limit 25',
         )
         result = self.cursor.fetchall()
         self.finish()
