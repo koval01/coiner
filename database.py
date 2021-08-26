@@ -39,7 +39,8 @@ class PostSQL:
         except Exception as e:
             logging.debug(e)
 
-    def add_user(self) -> None:
+    def add_user(self, custom_user=0) -> None:
+        if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'insert into wallet(name, balance, user_id, username) values (%(name)s, 0, %(user_id)s, %(username)s);',
             {
