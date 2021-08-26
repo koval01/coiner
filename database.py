@@ -52,7 +52,8 @@ class PostSQL:
         self.conn.commit()
         self.finish()
 
-    def get_balance(self) -> int:
+    def get_balance(self, custom_user=0) -> int:
+        if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'select balance from wallet where user_id = %(user_id)s limit 1',
             {'user_id': self.user_id},
