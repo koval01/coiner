@@ -177,7 +177,7 @@ async def check_balance(message: types.Message):
         bot_msg = await message.reply("%s\n\n%s\n\n%s" % (
             "<b>- Топ 10 -</b>", top_, 
             "<i>Общая сумма у всех пользователей бота</i> <code>%s</code> <b>гривен</b>" %
-            database.PostSQL(message).get_sum_balance()
+            human_format(int(database.PostSQL(message).get_sum_balance()))
         ))
         await cleaner_body(bot_msg)
 
