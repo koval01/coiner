@@ -16,7 +16,7 @@ from utils import human_format
 
 # Глобальная функция для создания счёта юзера
 async def private_balance_create(message: Message, pass_check=False, cust_usr=0) -> None:
-    if database.PostSQL(message).check_user():
+    if database.PostSQL(message).check_user(custom_user=cust_usr):
         if not pass_check:
             await message.reply("Твой баланс: %d гривен" % database.PostSQL(message).get_balance(
                 custom_user=cust_usr))
