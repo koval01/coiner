@@ -19,7 +19,7 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
             return
 
         if int(database.PostSQL(message).check_user()[2]) < sum_:
-            await message.reply("Недостаточно монет!")
+            await message.reply("Недостаточно гривен!")
             return
 
         # Сначала пробуем снять монеты со счёта отправителя
@@ -41,7 +41,7 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
             return
 
         # Уведомим получателя
-        await notify_("На счёт было зачислено %d COINS от %s" % (
+        await notify_("На счёт было зачислено %d гривен от %s" % (
             sum_, name_
         ), user_)
 
