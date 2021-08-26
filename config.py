@@ -9,6 +9,7 @@ DB_USER = os.environ.get("DB_USER", None)
 DB_PASS = os.environ.get("DB_PASS", None)
 
 START_BALANCE = 100
+CLEANER = False
 
 BOT_INFO = """
 Этот бот был написан за один день, и не очень сложным. Цель этого бота - развлекать участников групп. 
