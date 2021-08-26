@@ -2,6 +2,7 @@ import logging
 from random import uniform, randint
 
 from aiogram import types
+from aiogram.types.message import Message
 
 import config
 import database
@@ -13,18 +14,25 @@ from .cleaner import cleaner_body
 from utils import human_format
 
 
+# Глобальная функция для создания счёта юзера
+async def private_balance_create(message: Message, pass_check=False, cust_usr=0) -> None:
+    if database.PostSQL(message).check_user():
+        if not pass_check:
+            await message.reply("Твой баланс: %d гривен" % database.PostSQL(message).get_balance(
+                custom_user=cust_usr))
+    else:
+        database.PostSQL(message).add_user(custom_user=cust_usr)
+        database.PostSQL(message).modify_balance(config.START_BALANCE, custom_user=cust_usr)
+        await message.reply("Привет %s, твой счёт успешно создан. Также тебе было начислено %d гривен!" % (
+            message.from_user.first_name, config.START_BALANCE
+        ))
+            
+
 # Создание счёта, доступно тоже для всех
 @dp.message_handler(commands=['start'], is_private=True)
 async def check_balance(message: types.Message):
     if await throttling_all(message):
-        if database.PostSQL(message).check_user():
-            await message.reply("Твой баланс: %d гривен" % database.PostSQL(message).get_balance())
-        else:
-            database.PostSQL(message).add_user()
-            database.PostSQL(message).modify_balance(config.START_BALANCE)
-            await message.reply("Привет %s, твой счёт успешно создан. Также тебе было начислено %d гривен!" % (
-                message.from_user.first_name, config.START_BALANCE
-            ))
+        private_balance_create(messsage)
 
 
 @dp.message_handler(commands=['start'], is_group=True)
@@ -170,6 +178,8 @@ async def check_balance(message: types.Message):
 # Слушаем группу, и выдаём для группы вознаграждение за актив
 @dp.message_handler(is_group=True)
 async def group_echo(message: types.Message):
+    private_balance_create(messsage, pass_check=True, cust_usr=message.from_user.id)
+    
     if uniform(0, 1) >= 0.95:
         value_ = randint(1, 20)
         value_for_user = randint(1, 5)
