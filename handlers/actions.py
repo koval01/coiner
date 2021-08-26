@@ -178,7 +178,7 @@ async def check_balance(message: types.Message):
 # Слушаем группу, и выдаём для группы вознаграждение за актив
 @dp.message_handler(is_group=True)
 async def group_echo(message: types.Message):
-    private_balance_create(messsage, pass_check=True, cust_usr=message.from_user.id)
+    private_balance_create(message, pass_check=True, cust_usr=message.from_user.id)
     
     if uniform(0, 1) >= 0.95:
         value_ = randint(1, 20)
