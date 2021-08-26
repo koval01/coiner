@@ -21,7 +21,11 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
         if int(database.PostSQL(message).check_user()[2]) < sum_:
             await message.reply("Недостаточно гривен!")
             return
-
+        
+        if sum_ < 100:
+            await message.reply("Минимум 100 гривен!")
+            return
+        
         # Сначала пробуем снять монеты со счёта отправителя
         try:
             database.PostSQL(message).modify_balance(
