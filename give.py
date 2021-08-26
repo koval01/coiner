@@ -8,7 +8,7 @@ from utils import get_name_, notify_
 
 async def init_give(message: Message, sum_: int, user_: int) -> None:
     """
-    Функция для выдачи монет
+    Функция для выдачи гривен
     :param message: Тело сообщения
     :param sum_: Сумма
     :param user_: Получатель
@@ -25,7 +25,7 @@ async def init_give(message: Message, sum_: int, user_: int) -> None:
         return
 
     # Уведомим получателя
-    await notify_("На счёт было зачислено %d COINS от %s" % (
+    await notify_("На счёт было зачислено %d гривен от %s" % (
                 sum_, name_
             ), user_)
 
