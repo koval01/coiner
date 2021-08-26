@@ -9,6 +9,7 @@ DB_USER = os.environ.get("DB_USER", None)
 DB_PASS = os.environ.get("DB_PASS", None)
 
 START_BALANCE = 100
+COM_TRANS = 4  # 4 процента комиссии
 CLEANER = False
 
 BOT_INFO = """
