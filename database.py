@@ -61,6 +61,14 @@ class PostSQL:
         result = self.cursor.fetchall()
         self.finish()
         return result[0][0]
+    
+    def get_sum_balance(self) -> int:
+        self.cursor.execute(
+            'select sum(balance) from wallet limit 1',
+        )
+        result = self.cursor.fetchall()
+        self.finish()
+        return result[0][0]
 
     def get_top_balance(self) -> int:
         self.cursor.execute(
