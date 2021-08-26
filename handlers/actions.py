@@ -174,7 +174,9 @@ async def check_balance(message: types.Message):
             ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«%d»</b>" %
             (i+1, e[0], human_format(int(e[1])), e[2]) for i, e in enumerate(data)]
         )
-        bot_msg = await message.reply(top_)
+        bot_msg = await message.reply("%s\n\n%s" % (
+            "<b>- Топ 10 -</b>", top_
+        ))
         await cleaner_body(bot_msg)
 
 
