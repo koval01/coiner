@@ -171,8 +171,8 @@ async def check_balance(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).get_top_balance()
         top_ = "\n".join(
-            ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b>" %
-            (i+1, e[0], human_format(int(e[1]))) for i, e in enumerate(data)]
+            ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | «%d»" %
+            (i+1, e[0], human_format(int(e[1])), e[2]) for i, e in enumerate(data)]
         )
         bot_msg = await message.reply(top_)
         await cleaner_body(bot_msg)
