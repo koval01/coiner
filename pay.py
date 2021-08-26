@@ -5,7 +5,7 @@ import logging, database
 
 async def init_pay(message: Message, sum_: int, user_: int) -> None:
     """
-    Функция для передачи монет
+    Функция для передачи гривен
     :param message: Тело сообщения
     :param sum_: Сумма
     :param user_: Получатель
