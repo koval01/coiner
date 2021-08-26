@@ -6,18 +6,18 @@ from config import DB_HOST, DB_NAME, DB_PASS, DB_USER
 
 
 class PostSQL:
-    def __init__(self, msg: Message) -> None:
+    def __init__(self, msg: Message, set_private=False) -> None:
         self.conn = psycopg2.connect(
             dbname=DB_NAME, user=DB_USER,
             password=DB_PASS, host=DB_HOST
         )
         self.cursor = self.conn.cursor()
 
-        if msg.chat.type in ["group", "supergroup"]:
+        if msg.chat.type in ["group", "supergroup"] and not set_private:
             self.user_id = msg.chat.id
             self.name = msg.chat.title
             self.username = "@group"
-        elif msg.chat.type == "private":
+        elif msg.chat.type == "private" or set_private:
             self.user_id = msg.from_user.id
             self.name = msg.from_user.first_name
             self.username = msg.from_user.username
