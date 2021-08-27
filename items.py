@@ -35,4 +35,13 @@ items_ = [
     {"name": "Доширак", "price": 10, "chance_drop": 0.99, "icon": "🍝"},
     {"name": "Мивина", "price": 14, "chance_drop": 0.98, "icon": "🍝"},
     {"name": "Хлеб", "price": 8, "chance_drop": 0.99, "icon": "🍞"},
+    {"name": "Шоколадка", "price": 100, "chance_drop": 0.9, "icon": "🍫"},
+    {"name": "Суши", "price": 1500, "chance_drop": 0.7, "icon": "🍣"},
+    {"name": "Пирог", "price": 5000, "chance_drop": 0.4, "icon": "🥮"},
+
+    {"name": "Резиновый писюн", "price": 300, "chance_drop": 0.99, "icon": "🍆"},
+    {"name": "Сигареты", "price": 50, "chance_drop": 0.9, "icon": "🚬"},
+    {"name": "Балтика 9", "price": 50, "chance_drop": 0.9, "icon": "🍺"},
+    {"name": "Вибратор", "price": 500, "chance_drop": 0.95, "icon": "🍆"},
+    {"name": "Пистолет", "price": 150000, "chance_drop": 0.05, "icon": "🔫"},
 ]

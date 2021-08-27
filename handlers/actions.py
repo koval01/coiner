@@ -9,6 +9,8 @@ from buy_slave import init_transaction_ as slave_buy_
 from dispatcher import dp
 from give import init_give
 from pay import init_pay
+from items import items_ as all_items
+from inventory import take_item
 from throttling import throttling_all
 from utils import human_format
 from .cleaner import cleaner_body
@@ -50,13 +52,13 @@ async def private_balance_create(message: Message, pass_check=False, cust_usr=0)
 
 # Создание счёта, доступно тоже для всех
 @dp.message_handler(commands=['start'], is_private=True)
-async def check_balance(message: types.Message):
+async def start_for_private(message: types.Message):
     if await throttling_all(message):
         await private_balance_create(message)
 
 
 @dp.message_handler(commands=['start'], is_group=True)
-async def check_balance(message: types.Message):
+async def start_for_group(message: types.Message):
     if await throttling_all(message):
         if database.PostSQL(message).check_user():
             await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance())
@@ -71,7 +73,7 @@ async def check_balance(message: types.Message):
 
 # Проверка баланса, работает без всяких ограничений
 @dp.message_handler(commands=['wallet'], is_private=True)
-async def check_balance(message: types.Message):
+async def wallet_private(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
         await message.reply("Твой баланс: %d гривен\nНомер счёта: «%d»" % (data[2], data[3]))
@@ -79,7 +81,7 @@ async def check_balance(message: types.Message):
 
 # И команда для групп конечно
 @dp.message_handler(commands=['wallet'], is_group=True)
-async def check_balance(message: types.Message):
+async def wallet_group(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
         bot_msg = await message.reply("Баланс группы: %d гривен\nНомер счёта группы: «%d»" % (data[2], data[3]))
@@ -88,7 +90,7 @@ async def check_balance(message: types.Message):
 
 # Если вызвали из приватного чата
 @dp.message_handler(commands=['pay'], is_private=True)
-async def check_balance(message: types.Message):
+async def pay_in_private(message: types.Message):
     if await throttling_all(message):
         try:
             u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
@@ -106,7 +108,7 @@ async def check_balance(message: types.Message):
 
 
 @dp.message_handler(commands=['buyslave'], is_private=True)
-async def check_balance(message: types.Message):
+async def buy_slave_private(message: types.Message):
     if await throttling_all(message):
         try:
             x = await slave_buy_(message)
@@ -117,13 +119,13 @@ async def check_balance(message: types.Message):
 
 
 @dp.message_handler(commands=['buyslave'], is_group=True)
-async def check_balance(message: types.Message):
+async def buy_slave_group(message: types.Message):
     if await throttling_all(message):
         await message.reply("Раб может быть только личным! (Перейди в личные сообщение к боту)")
 
 
 @dp.message_handler(commands=['slaves'])
-async def check_balance(message: types.Message):
+async def user_slaves(message: types.Message):
     if await throttling_all(message):
         data = int(database.PostSQL(message).get_slaves(
             custom_user=message.from_user.id))
@@ -132,9 +134,58 @@ async def check_balance(message: types.Message):
         ))
 
 
+# Можно даже глянуть свой инвентарь
+@dp.message_handler(commands=['inventory'])
+async def user_inventory(message: types.Message):
+    if await throttling_all(message):
+        data = database.PostSQL_Inventory(message).get_inventory()
+        items_ = "\n".join(
+            ["(%d) %s %s (%d гривен)" %
+             (
+                i[1],
+                all_items[i[0]]["icon"],
+                all_items[i[0]]["name"],
+                all_items[i[0]]["price"]
+             ) for i in data]
+        )
+        bot_msg = await message.reply("%s\n\nСлотов: <b>%d/50</b>" % (items_, len(data)))
+        await cleaner_body(bot_msg)
+
+
+# Продажа предметов
+@dp.message_handler(commands=['sell'], is_private=True)
+async def sell_private(message: types.Message):
+    if await throttling_all(message):
+        try:
+            item_id = int(message.text.split()[1])
+            data_ = database.PostSQL_Inventory(message).get_item(item_id)
+            x = await take_item(message, item_id)
+            item__ = all_items[int(data_[0])]
+            item_price = item__["price"]
+            if x:
+                await init_give(message, item_price, custom_name="торговец")
+                await message.reply("Предмет %s %s был продан за %d гривен!" % (
+                    item__["icon"], item__["name"], item_price
+                ))
+        except Exception as e:
+            logging.info(e)
+            await message.reply(
+                "/sell *ID предмета*"
+                "\n\nПример: (*ID предмета*) 🇺🇸 "
+                "Флаг США (15000 гривен)"
+            )
+
+
+# Из группы возможность продажи предметов не предусмотренна
+@dp.message_handler(commands=['sell'], is_private=False)
+async def sell_not_private(message: types.Message):
+    if await throttling_all(message):
+        await message.reply("Продавать предметы можно только из приватного чата с ботом")
+
+
 # Если вызвал админ из группы
 @dp.message_handler(commands=['pay'], is_admin=True)
-async def check_balance(message: types.Message):
+async def pay_group_admin(message: types.Message):
     if await throttling_all(message):
         try:
             u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
@@ -153,14 +204,14 @@ async def check_balance(message: types.Message):
 
 # Если вызвал участник группы, без прав администратора
 @dp.message_handler(commands=['pay'], is_admin=False)
-async def check_balance(message: types.Message):
+async def pay_not_group_admin(message: types.Message):
     if await throttling_all(message):
         await message.reply("Чтобы управлять счётом, нужно быть администратором группы.")
 
 
 # Выдача монет от владельца бота
 @dp.message_handler(commands=['give'], is_owner=True)
-async def check_balance(message: types.Message):
+async def give_money(message: types.Message):
     if await throttling_all(message):
         try:
             u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
@@ -177,33 +228,36 @@ async def check_balance(message: types.Message):
 
 # Если у пользователя нет прав на эту команду
 @dp.message_handler(commands=['give'], is_owner=False)
-async def check_balance(message: types.Message):
+async def give_money_no_access(message: types.Message):
     if await throttling_all(message):
         await message.reply("Недоступно!")
 
 
 # Немного информации о боте
 @dp.message_handler(commands=['info'])
-async def check_balance(message: types.Message):
+async def bot_info(message: types.Message):
     if await throttling_all(message):
         await message.reply(config.BOT_INFO)
 
 
 # Ну и подсказки по боту
 @dp.message_handler(commands=['faq'])
-async def check_balance(message: types.Message):
+async def bot_faq(message: types.Message):
     if await throttling_all(message):
         await message.reply(config.BOT_FAQ)
 
 
 # Испытаем удачу
 @dp.message_handler(commands=['dice'])
-async def check_balance(message: types.Message):
+async def dice_(message: types.Message):
     if await throttling_all(message):
         if uniform(0, 1) >= 0.4:
-            value_ = randint(1, 10) + (randint(30, 200) / uniform(2, 5))
-            database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
-            bot_msg = await message.reply("Тебе выпало %d гривен!" % value_)
+            if uniform(0, 1) > 0.2:
+                value_ = randint(1, 10) + (randint(30, 200) / uniform(2, 5))
+                database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
+                bot_msg = await message.reply("Тебе выпало %d гривен!" % value_)
+            else:
+                pass
         else:
             bot_msg = await message.reply("Тебе не повезло. Ничего не выпало... :(")
         await cleaner_body(bot_msg)
@@ -211,7 +265,7 @@ async def check_balance(message: types.Message):
 
 # Добавим и возможноть посмотреть кто там самый богатый
 @dp.message_handler(commands=['top'])
-async def check_balance(message: types.Message):
+async def top_users(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).get_top_balance()
         top_ = "\n".join(

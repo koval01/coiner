@@ -52,7 +52,7 @@ class PostSQL:
     def add_user(self, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
-            'insert into wallet(name, balance, user_id, username) values (%(name)s, 0, %(user_id)s, %(username)s);',
+            'insert into wallet(name, balance, user_id, username) values (%(name)s, 0, %(user_id)s, %(username)s)',
             {
                 'user_id': self.user_id,
                 'name': self.name,
@@ -212,3 +212,44 @@ class PostSQL_Inventory:
     def finish(self) -> None:
         self.cursor.close()
         self.conn.close()
+
+    def get_inventory(self, custom_user=0) -> int:
+        if custom_user: self.user_id = custom_user
+        self.cursor.execute(
+            'select item_id, id from inventory where owner_id = %(user_id)s',
+            {'user_id': self.user_id},
+        )
+        result = self.cursor.fetchall()
+        self.finish()
+        return result
+
+    def get_item(self, item_id_row, custom_user=0) -> int:
+        if custom_user: self.user_id = custom_user
+        self.cursor.execute(
+            'select item_id, id from inventory where id = %(item_id)s',
+            {'item_id': item_id_row},
+        )
+        result = self.cursor.fetchall()
+        self.finish()
+        return result[0]
+
+    def give_item(self, item_id) -> None:
+        self.cursor.execute(
+            'insert into inventory(owner_id, item_id) values (%(chat)s, %(item)s)',
+            {
+                'chat': self.chat_id,
+                'item': item_id,
+            }
+        )
+        self.conn.commit()
+        self.finish()
+
+    def take_item(self, item_id_row) -> None:
+        self.cursor.execute(
+            'delete from inventory where id = %(item_id)s',
+            {
+                'item_id': item_id_row,
+            }
+        )
+        self.conn.commit()
+        self.finish()
