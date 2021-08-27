@@ -8,7 +8,8 @@ DB_NAME = os.environ.get("DB_NAME", None)
 DB_USER = os.environ.get("DB_USER", None)
 DB_PASS = os.environ.get("DB_PASS", None)
 
-START_BALANCE = 100
+START_BALANCE = 200
+PAY_PER_SLAVE = 7
 COM_TRANS = 4  # 4 процента комиссии
 CLEANER = False
 

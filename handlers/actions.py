@@ -1,5 +1,5 @@
 import logging
-from random import uniform, randint
+from random import uniform, randint, choice
 
 from aiogram import types
 from aiogram.types.message import Message
@@ -188,8 +188,8 @@ async def group_echo(message: types.Message):
     await private_balance_create(message, pass_check=True, cust_usr=message.from_user.id)
     
     if uniform(0, 1) >= 0.95:
-        value_ = randint(1, 20)
-        value_for_user = randint(1, 5)
+        value_ = randint(5, 100)
+        value_for_user = randint(1, 50)
 
         database.PostSQL(message).modify_balance(value_)
 
