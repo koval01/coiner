@@ -245,7 +245,7 @@ async def bot_faq(message: types.Message):
 async def dice_(message: types.Message):
     if await throttling_all(message):
         if uniform(0, 1) >= 0.4:
-            if uniform(0, 1) > 0.2:
+            if uniform(0, 1) > 0: #  пока только деньги
                 value_ = randint(1, 10) + (randint(30, 200) / uniform(2, 5))
                 database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
                 bot_msg = await message.reply("Тебе выпало %d гривен!" % value_)
