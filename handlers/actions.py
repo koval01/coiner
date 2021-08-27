@@ -133,13 +133,14 @@ async def user_slaves(message: types.Message):
 async def user_inventory(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL_Inventory(message).get_inventory()
+        print(data)
         items_ = "\n".join(
             ["(%d) %s %s (%d гривен)" %
              (
                 i[1],
-                all_items[int(i[0])]["icon"],
-                all_items[int(i[0])]["name"],
-                all_items[int(i[0])]["price"]
+                all_items[i[0]]["icon"],
+                all_items[i[0]]["name"],
+                all_items[i[0]]["price"]
              ) for i in data]
         )
         bot_msg = await message.reply("%s\n\nСлотов занято: <b>%d/50</b>" % (items_, len(data)))
