@@ -148,7 +148,7 @@ async def user_inventory(message: types.Message):
                 all_items[i[0]]["price"]
              ) for i in data]
         )
-        bot_msg = await message.reply("%s\n\nСлотов: <b>%d/50</b>" % (items_, len(data)))
+        bot_msg = await message.reply("%s\n\nСлотов занято: <b>%d/50</b>" % (items_, len(data)))
         await cleaner_body(bot_msg)
 
 
