@@ -89,6 +89,27 @@ class PostSQL:
         self.conn.commit()
         self.finish()
 
+    def modify_slaves(self, slaves=1, take=False, custom_user=0) -> None:
+        if custom_user: self.user_id = custom_user
+        if take: x = "-"
+        else: x = "+"
+        self.cursor.execute(
+            f'update wallet set slaves = slaves {x} %(slaves)s where user_id = %(user_id)s',
+            {'user_id': self.user_id, 'slaves': slaves},
+        )
+        self.conn.commit()
+        self.finish()
+
+    def get_slaves(self, custom_user=0) -> int:
+        if custom_user: self.user_id = custom_user
+        self.cursor.execute(
+            'select slaves from wallet where user_id = %(user_id)s limit 1',
+            {'user_id': self.user_id},
+        )
+        result = self.cursor.fetchall()
+        self.finish()
+        return result[0][0]
+
 
 class PostSQL_ChatManager:
     def __init__(self, msg: Message) -> None:
