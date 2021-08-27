@@ -6,15 +6,21 @@ from aiogram.types.message import Message
 from utils import get_name_, notify_
 
 
-async def init_give(message: Message, sum_: int, user_: int) -> None:
+async def init_give(message: Message = None,
+                    sum_: int = 0, user_: int = 0,
+                    custom_name: str = None) -> None:
     """
     Функция для выдачи гривен
     :param message: Тело сообщения
     :param sum_: Сумма
     :param user_: Получатель
+    :param custom_name: Кастомное имя отправителя
     :return:
     """
-    name_ = await get_name_(message)
+    if message:
+        name_ = await get_name_(message)
+    else:
+        name_ = custom_name
 
     try:
         database.PostSQL(message).modify_balance(

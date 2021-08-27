@@ -6,21 +6,31 @@ from config import DB_HOST, DB_NAME, DB_PASS, DB_USER
 
 
 class PostSQL:
-    def __init__(self, msg: Message, set_private=False) -> None:
+    def __init__(self, msg: Message = None, set_private=False) -> None:
         self.conn = psycopg2.connect(
             dbname=DB_NAME, user=DB_USER,
             password=DB_PASS, host=DB_HOST
         )
         self.cursor = self.conn.cursor()
 
-        if msg.chat.type in ["group", "supergroup"] and not set_private:
-            self.user_id = msg.chat.id
-            self.name = msg.chat.title
-            self.username = "@group"
-        elif msg.chat.type == "private" or set_private:
-            self.user_id = msg.from_user.id
-            self.name = msg.from_user.first_name
-            self.username = msg.from_user.username
+        try:
+            #  Проверяем есть ли message
+            if msg: pass
+        except Exception as e:
+            logging.debug(e)
+
+        try:
+            #  Если нету msg, то просто скипаем этот блок
+            if msg.chat.type in ["group", "supergroup"] and not set_private:
+                self.user_id = msg.chat.id
+                self.name = msg.chat.title
+                self.username = "@group"
+            elif msg.chat.type == "private" or set_private:
+                self.user_id = msg.from_user.id
+                self.name = msg.from_user.first_name
+                self.username = msg.from_user.username
+        except Exception as e:
+            logging.debug(e)
 
     def finish(self) -> None:
         self.cursor.close()
@@ -109,6 +119,14 @@ class PostSQL:
         result = self.cursor.fetchall()
         self.finish()
         return result[0][0]
+
+    def get_slave_owners(self) -> int:
+        self.cursor.execute(
+            'select user_id, slaves from wallet where slaves > 0',
+        )
+        result = self.cursor.fetchall()
+        self.finish()
+        return result
 
 
 class PostSQL_ChatManager:

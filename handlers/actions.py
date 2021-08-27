@@ -1,5 +1,5 @@
 import logging
-from random import uniform, randint, choice
+from random import uniform, randint
 
 from aiogram import types
 from aiogram.types.message import Message
@@ -9,6 +9,7 @@ import database
 from dispatcher import dp
 from give import init_give
 from pay import init_pay
+from buy_slave import init_transaction_ as slave_buy_
 from throttling import throttling_all
 from .cleaner import cleaner_body
 from utils import human_format
@@ -86,6 +87,33 @@ async def check_balance(message: types.Message):
         except Exception as e:
             logging.debug(e)
             await message.reply("/pay *получатель* *сумма*")
+
+
+@dp.message_handler(commands=['buyslave'], is_private=True)
+async def check_balance(message: types.Message):
+    if await throttling_all(message):
+        try:
+            x = await slave_buy_(message)
+            if x:
+                await message.reply("Ты успешно купил нового раба >:)")
+        except Exception as e:
+            logging.debug(e)
+
+
+@dp.message_handler(commands=['buyslave'], is_group=True)
+async def check_balance(message: types.Message):
+    if await throttling_all(message):
+        await message.reply("Раб может быть только личным!")
+
+
+@dp.message_handler(commands=['slaves'])
+async def check_balance(message: types.Message):
+    if await throttling_all(message):
+        data = int(database.PostSQL(message).get_slaves(
+            custom_user=message.from_user.id))
+        await message.reply("У тебя %d рабов\nДоход с них %d гривен в час" % (
+            data, data * config.PAY_PER_SLAVE
+        ))
 
 
 # Если вызвал админ из группы

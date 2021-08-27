@@ -18,7 +18,7 @@ async def init_transaction_(message: Message) -> None:
 
     try:
         if int(database.PostSQL(message).check_user()[2]) < slave_price:
-            await message.reply("Недостаточно гривен! Раб стоит %d гривен!" % slave_price)
+            await message.reply("Недостаточно гривен! Новый раб стоит %d гривен!" % slave_price)
             return
 
         # Сначала пробуем снять монеты со счёта покупателя
