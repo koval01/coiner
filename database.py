@@ -201,13 +201,11 @@ class PostSQL_Inventory:
         )
         self.cursor = self.conn.cursor()
 
-        if msg.chat.type == "private" or set_private:
-            self.user_id = msg.from_user.id
-            self.name = msg.from_user.first_name
-            self.username = msg.from_user.username
-        else:
-            logging.debug("Only private chats!")
-            return
+        self.user_id = msg.from_user.id
+        self.name = msg.from_user.first_name
+        self.username = msg.from_user.username
+
+        # Inventory for only private chats IDs
 
     def finish(self) -> None:
         self.cursor.close()
@@ -226,7 +224,7 @@ class PostSQL_Inventory:
     def get_item(self, item_id_row, custom_user=0) -> int:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
-            'select item_id, id from inventory where id = %(item_id)s',
+            'select item_id, id, owner_id from inventory where id = %(item_id)s',
             {'item_id': item_id_row},
         )
         result = self.cursor.fetchall()
@@ -237,7 +235,7 @@ class PostSQL_Inventory:
         self.cursor.execute(
             'insert into inventory(owner_id, item_id) values (%(chat)s, %(item)s)',
             {
-                'chat': self.chat_id,
+                'chat': self.user_id,
                 'item': item_id,
             }
         )

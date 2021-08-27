@@ -10,7 +10,7 @@ from dispatcher import dp
 from give import init_give
 from pay import init_pay
 from items import items_ as all_items
-from inventory import take_item
+from inventory import take_item, item_dice, give_item
 from throttling import throttling_all
 from utils import human_format
 from .cleaner import cleaner_body
@@ -107,7 +107,7 @@ async def pay_in_private(message: types.Message):
             await message.reply("/pay *получатель* *сумма*")
 
 
-@dp.message_handler(commands=['buyslave'], is_private=True)
+@dp.message_handler(commands=['buyslave'])
 async def buy_slave_private(message: types.Message):
     if await throttling_all(message):
         try:
@@ -116,12 +116,6 @@ async def buy_slave_private(message: types.Message):
                 await message.reply("Ты успешно купил нового раба >:)")
         except Exception as e:
             logging.debug(e)
-
-
-@dp.message_handler(commands=['buyslave'], is_group=True)
-async def buy_slave_group(message: types.Message):
-    if await throttling_all(message):
-        await message.reply("Раб может быть только личным! (Перейди в личные сообщение к боту)")
 
 
 @dp.message_handler(commands=['slaves'])
@@ -153,17 +147,23 @@ async def user_inventory(message: types.Message):
 
 
 # Продажа предметов
-@dp.message_handler(commands=['sell'], is_private=True)
+@dp.message_handler(commands=['sell'])
 async def sell_private(message: types.Message):
     if await throttling_all(message):
         try:
             item_id = int(message.text.split()[1])
             data_ = database.PostSQL_Inventory(message).get_item(item_id)
+            if int(data_[2]) != message.from_user.id:
+                await message.reply("Мне кажется или этот предмет не твой"
+                                    "\nТы меня обмануть решил что ли? Гадёныш, "
+                                    "иди делом лучше займись!")
+                return
+
             x = await take_item(message, item_id)
             item__ = all_items[int(data_[0])]
             item_price = item__["price"]
             if x:
-                await init_give(message, item_price, custom_name="торговец")
+                await init_give(message, item_price, item_sell=True)
                 await message.reply("Предмет %s %s был продан за %d гривен!" % (
                     item__["icon"], item__["name"], item_price
                 ))
@@ -174,13 +174,6 @@ async def sell_private(message: types.Message):
                 "\n\nПример: (*ID предмета*) 🇺🇸 "
                 "Флаг США (15000 гривен)"
             )
-
-
-# Из группы возможность продажи предметов не предусмотренна
-@dp.message_handler(commands=['sell'], is_private=False)
-async def sell_not_private(message: types.Message):
-    if await throttling_all(message):
-        await message.reply("Продавать предметы можно только из приватного чата с ботом")
 
 
 # Если вызвал админ из группы
@@ -257,7 +250,11 @@ async def dice_(message: types.Message):
                 database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
                 bot_msg = await message.reply("Тебе выпало %d гривен!" % value_)
             else:
-                pass
+                item_ = await item_dice()
+                await give_item(message, item_['id'])
+                bot_msg = await message.reply("Тебе выпало %s %s (стоимость %d гривен)" % (
+                    item_['icon'], item_['name'], item_['price'],
+                ))
         else:
             bot_msg = await message.reply("Тебе не повезло. Ничего не выпало... :(")
         await cleaner_body(bot_msg)
