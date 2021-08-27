@@ -119,7 +119,7 @@ async def check_balance(message: types.Message):
 @dp.message_handler(commands=['buyslave'], is_group=True)
 async def check_balance(message: types.Message):
     if await throttling_all(message):
-        await message.reply("Раб может быть только личным!")
+        await message.reply("Раб может быть только личным! (Перейди в личные сообщение к боту)")
 
 
 @dp.message_handler(commands=['slaves'])
