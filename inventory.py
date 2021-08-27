@@ -50,7 +50,7 @@ async def item_dice() -> dict:
     :return: Словарь с данными о выигранной вещи
     """
     shuffle(all_items)
-    for i in range(20):
+    for i in range(50):
         for i in all_items:
             if i["chance_drop"] > uniform(0, 1) > uniform(0, 0.9):
                 return i
