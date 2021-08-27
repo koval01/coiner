@@ -88,6 +88,15 @@ class PostSQL:
         self.finish()
         return result
 
+    def modify_name_(self, name, custom_user=0) -> None:
+        if custom_user: self.user_id = custom_user
+        self.cursor.execute(
+            'update wallet set name = %(name)s where user_id = %(user_id)s',
+            {'user_id': self.user_id, 'name': name},
+        )
+        self.conn.commit()
+        self.finish()
+
     def modify_balance(self, coins, take=False, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
         if take: x = "-"
