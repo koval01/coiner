@@ -1,4 +1,4 @@
 from aiogram import types
-from dispatcher import dp
-import config
 
+import config
+from dispatcher import dp

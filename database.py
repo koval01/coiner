@@ -71,7 +71,7 @@ class PostSQL:
         result = self.cursor.fetchall()
         self.finish()
         return result[0][0]
-    
+
     def get_sum_balance(self) -> int:
         self.cursor.execute(
             'select sum(balance) from wallet limit 1',
@@ -99,8 +99,10 @@ class PostSQL:
 
     def modify_balance(self, coins, take=False, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
-        if take: x = "-"
-        else: x = "+"
+        if take:
+            x = "-"
+        else:
+            x = "+"
         self.cursor.execute(
             f'update wallet set balance = balance {x} %(coins)s where user_id = %(user_id)s',
             {'user_id': self.user_id, 'coins': coins},
@@ -110,8 +112,10 @@ class PostSQL:
 
     def modify_slaves(self, slaves=1, take=False, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
-        if take: x = "-"
-        else: x = "+"
+        if take:
+            x = "-"
+        else:
+            x = "+"
         self.cursor.execute(
             f'update wallet set slaves = slaves {x} %(slaves)s where user_id = %(user_id)s',
             {'user_id': self.user_id, 'slaves': slaves},
@@ -187,5 +191,3 @@ class PostSQL_ChatManager:
         )
         self.conn.commit()
         self.finish()
-
-

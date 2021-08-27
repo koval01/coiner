@@ -1,8 +1,9 @@
-from aiogram.types.message import Message
-from utils import get_name_, notify_
 import logging
-import database
+from aiogram.types.message import Message
+
 import config
+import database
+from utils import get_name_, notify_
 
 
 async def init_pay(message: Message, sum_: int, user_: int) -> None:
@@ -23,11 +24,11 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
         if int(database.PostSQL(message).check_user()[2]) < sum_:
             await message.reply("Недостаточно гривен!")
             return
-        
+
         if sum_ < 100:
             await message.reply("Минимум 100 гривен!")
             return
-        
+
         # Сначала пробуем снять монеты со счёта отправителя
         try:
             database.PostSQL(message).modify_balance(
@@ -36,7 +37,7 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
         except Exception as e:
             logging.error(e)
             return
-        
+
         # Посчитаем комиссию
         recount_ = (config.COM_TRANS / 100)
         coef_ = float(sum_) * float(recount_)

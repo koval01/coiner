@@ -1,7 +1,8 @@
-from aiogram.utils.exceptions import Throttled
 from aiogram.types.message import Message
-from dispatcher import dp
+from aiogram.utils.exceptions import Throttled
+
 import handlers
+from dispatcher import dp
 
 
 async def throttling_all(msg: Message) -> bool:

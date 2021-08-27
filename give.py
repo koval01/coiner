@@ -1,8 +1,7 @@
-import database
 import logging
-
 from aiogram.types.message import Message
 
+import database
 from utils import get_name_, notify_
 
 
@@ -32,9 +31,7 @@ async def init_give(message: Message = None,
 
     # Уведомим получателя
     await notify_("На счёт было зачислено %d гривен от %s" % (
-                sum_, name_
-            ), user_)
+        sum_, name_
+    ), user_)
 
     return True
-
-

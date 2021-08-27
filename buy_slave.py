@@ -1,7 +1,8 @@
-from aiogram.types.message import Message
 import logging
-import database
+from aiogram.types.message import Message
+
 import config
+import database
 
 
 async def init_transaction_(message: Message) -> None:
@@ -43,5 +44,3 @@ async def init_transaction_(message: Message) -> None:
         return
 
     return True
-
-

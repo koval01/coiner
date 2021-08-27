@@ -1,10 +1,9 @@
-import asyncio
-
 import aioschedule as schedule
-from give import init_give
+import asyncio
 
 import config
 import database
+from give import init_give
 
 
 async def slaves_() -> None:
@@ -25,5 +24,3 @@ async def scheduler():
     while True:
         await schedule.run_pending()
         await asyncio.sleep(1)
-
-

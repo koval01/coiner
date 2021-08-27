@@ -1,18 +1,17 @@
 import logging
-from random import uniform, randint
-
 from aiogram import types
 from aiogram.types.message import Message
+from random import uniform, randint
 
 import config
 import database
+from buy_slave import init_transaction_ as slave_buy_
 from dispatcher import dp
 from give import init_give
 from pay import init_pay
-from buy_slave import init_transaction_ as slave_buy_
 from throttling import throttling_all
-from .cleaner import cleaner_body
 from utils import human_format
+from .cleaner import cleaner_body
 
 
 # Глобальная функция для создания счёта юзера
@@ -47,7 +46,7 @@ async def private_balance_create(message: Message, pass_check=False, cust_usr=0)
         await message.reply("Привет %s, твой счёт успешно создан. Также тебе было начислено %d гривен!" % (
             message.from_user.first_name, config.START_BALANCE
         ))
-            
+
 
 # Создание счёта, доступно тоже для всех
 @dp.message_handler(commands=['start'], is_private=True)
@@ -217,10 +216,10 @@ async def check_balance(message: types.Message):
         data = database.PostSQL(message).get_top_balance()
         top_ = "\n".join(
             ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«%d»</b>" %
-            (i+1, e[0], human_format(int(e[1])), e[2]) for i, e in enumerate(data)]
+             (i + 1, e[0], human_format(int(e[1])), e[2]) for i, e in enumerate(data)]
         )
         bot_msg = await message.reply("%s\n\n%s\n\n%s" % (
-            "<b>- Топ 10 -</b>", top_, 
+            "<b>- Топ 10 -</b>", top_,
             "<i>Общая сумма у всех пользователей бота</i> <code>%s</code> <b>гривен</b>" %
             human_format(int(database.PostSQL(message).get_sum_balance()))
         ))
@@ -231,7 +230,7 @@ async def check_balance(message: types.Message):
 @dp.message_handler(is_group=True)
 async def group_echo(message: types.Message):
     await private_balance_create(message, pass_check=True, cust_usr=message.from_user.id)
-    
+
     if uniform(0, 1) >= 0.95:
         value_ = randint(5, 100)
         value_for_user = randint(1, 50)
@@ -252,5 +251,3 @@ async def group_echo(message: types.Message):
             await message.answer(
                 "За активность в этой группе на баланс группы было зачисленно - %d гривен" % value_
             )
-
-

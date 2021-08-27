@@ -1,5 +1,4 @@
 import logging
-
 from aiogram.types.message import Message
 
 from dispatcher import bot
@@ -90,4 +89,3 @@ def number_to_words(number: int) -> str:
         return b.get(number)
     else:
         return 'Число вне диапазона среза!'
-

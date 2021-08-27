@@ -1,8 +1,9 @@
-from aiogram.types.message import Message
-from dispatcher import bot
 import logging
-import database
+from aiogram.types.message import Message
+
 import config
+import database
+from dispatcher import bot
 
 
 async def cleaner_body(message: Message) -> None:
@@ -19,5 +20,3 @@ async def cleaner_body(message: Message) -> None:
         except Exception as e:
             database.PostSQL_ChatManager(message).add_new_chat()
             logging.error(e)
-
-
