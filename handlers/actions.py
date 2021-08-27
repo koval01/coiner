@@ -20,14 +20,16 @@ async def private_balance_create(message: Message, pass_check=False, cust_usr=0)
     data = database.PostSQL(message, set_private=pass_check).check_user(custom_user=cust_usr)
     if data:
         try:
-            if message.from_user.full_name != data[1]:
+            if message.from_user.full_name and \
+                    message.from_user.full_name != data[1]:
                 database.PostSQL(message).modify_name_(
                     name=message.from_user.full_name)
         except Exception as e:
             logging.debug(e)
 
         try:
-            if message.chat.title != data[1]:
+            if message.chat.title and \
+                    message.chat.title != data[1]:
                 database.PostSQL(message).modify_name_(
                     name=message.chat.title)
         except Exception as e:
