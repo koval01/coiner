@@ -251,3 +251,15 @@ class PostSQL_Inventory:
         )
         self.conn.commit()
         self.finish()
+
+    def clear_inventory(self, owner_items: int = 0) -> None:
+        if not owner_items:
+            owner_items = self.user_id
+        self.cursor.execute(
+            'delete from inventory where owner_id = %(owner_id)s',
+            {
+                'owner_id': owner_items,
+            }
+        )
+        self.conn.commit()
+        self.finish()

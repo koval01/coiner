@@ -10,7 +10,7 @@ from dispatcher import dp
 from give import init_give
 from pay import init_pay
 from items import items_ as all_items
-from inventory import take_item, item_dice, give_item
+from inventory import take_item, item_dice, give_item, take_all_items
 from throttling import throttling_all
 from utils import human_format
 from .cleaner import cleaner_body
@@ -174,6 +174,21 @@ async def sell_private(message: types.Message):
                 "\n\nПример: (*ID предмета*) 🇺🇸 "
                 "Флаг США (15000 гривен)"
             )
+
+
+# Продажа всего инвентаря сразу
+@dp.message_handler(commands=['sellall'])
+async def sell_private(message: types.Message):
+    if await throttling_all(message):
+        try:
+            items_price = sum([all_items[el[0]]["price"] for el in database.PostSQL_Inventory(message).get_inventory()])
+            x = await take_all_items(message)
+            if x:
+                await init_give(message, items_price, item_sell=True)
+                await message.reply("Предметы были проданы за %s гривен!" % human_format(items_price))
+        except Exception as e:
+            logging.info(e)
+            await message.reply("Произошла ошибка, похоже что у тебя нет предметов.")
 
 
 # Если вызвал админ из группы
