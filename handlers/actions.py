@@ -11,8 +11,8 @@ from give import init_give
 from pay import init_pay
 from items import items_ as all_items
 from inventory import take_item, item_dice, give_item, take_all_items
-from entertainment import ask_
-from throttling import throttling_all
+from entertainment import ask_, fagot_
+from throttling import throttling_ as throttling_all
 from utils import human_format
 from .cleaner import cleaner_body
 
@@ -149,7 +149,7 @@ async def user_inventory(message: types.Message):
 
 # Продажа предметов
 @dp.message_handler(commands=['sell'])
-async def sell_private(message: types.Message):
+async def sell__(message: types.Message):
     if await throttling_all(message):
         try:
             item_id = int(message.text.split()[1])
@@ -179,7 +179,7 @@ async def sell_private(message: types.Message):
 
 # Продажа всего инвентаря сразу
 @dp.message_handler(commands=['sellall'])
-async def sell_private(message: types.Message):
+async def sell_all_items(message: types.Message):
     if await throttling_all(message):
         try:
             items_price = sum([all_items[el[0]]["price"] for el in database.PostSQL_Inventory(message).get_inventory()])
@@ -240,6 +240,20 @@ async def give_money(message: types.Message):
 async def give_money_no_access(message: types.Message):
     if await throttling_all(message):
         await message.reply("Недоступно!")
+
+
+# Проверка на пидораса
+@dp.message_handler(commands=['fagot'], is_group=True)
+async def fagot_check(message: types.Message):
+    if await throttling_all(message):
+        await fagot_(message)
+
+
+# Проверка на пидораса в привате не работает
+@dp.message_handler(commands=['fagot'], is_private=True)
+async def fagot_check_private(message: types.Message):
+    if await throttling_all(message):
+        await message.reply("Только в группе, при всех >:")
 
 
 # Немного информации о боте

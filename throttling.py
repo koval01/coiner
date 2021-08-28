@@ -5,9 +5,10 @@ import handlers
 from dispatcher import dp
 
 
-async def throttling_all(msg: Message) -> bool:
+async def throttling_(msg: Message, throttle_name: str = "throttle_all",
+                      rate: int = 0.4) -> bool:
     try:
-        await dp.throttle('throttle_all', rate=0.4)
+        await dp.throttle(throttle_name, rate=rate)
     except Throttled:
         return False
     else:
