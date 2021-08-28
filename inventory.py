@@ -2,7 +2,6 @@ import logging
 from aiogram.types.message import Message
 from items import items_ as all_items
 from random import uniform, choice
-from random import shuffle
 import database
 
 
@@ -49,7 +48,6 @@ async def item_dice() -> dict:
     Рулетка на вещи
     :return: Словарь с данными о выигранной вещи
     """
-    shuffle(all_items)
     for i in range(50):
         for i in all_items:
             if i["chance_drop"] > uniform(0, 1) > uniform(0, 0.9):
