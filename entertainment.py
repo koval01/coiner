@@ -34,7 +34,7 @@ async def fagot_(message: Message) -> None:
     if await throttling_(
             message,
             throttle_name="fagot_info",
-            rate=900
+            rate=120
     ):
         value_ = uniform(0, 100)
         if int(config.BOT_OWNER) == int(message.from_user.id):
