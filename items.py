@@ -93,9 +93,9 @@ items_ = [
     {'id': 84, 'name': 'Флаг Швейцарии', 'price': 400, 'chance_drop': 0.5, 'icon': '🇨🇭'},
 
     {'id': 85, 'name': 'Сок "Золотой Дождь"', 'price': 7, 'chance_drop': 0.95, 'icon': '🧃'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
+    {'id': 86, 'name': 'Стринги', 'price': 1, 'chance_drop': 0.0001, 'icon': '🔞'},
+    {'id': 87, 'name': 'Портрет Путина', 'price': 1, 'chance_drop': 0.0001, 'icon': '🖼'},
+    {'id': 88, 'name': 'Cum by Zelensky', 'price': 1, 'chance_drop': 0.0001, 'icon': '⚪️'},
     # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
     # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
     # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},

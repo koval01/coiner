@@ -1,6 +1,8 @@
 from aiogram.types.message import Message
 from random import uniform, choice
 from throttling import throttling_
+from items import items_ as all_items
+from inventory import give_item
 import logging
 import config
 
@@ -44,6 +46,17 @@ async def fagot_(message: Message) -> None:
                     value_,
                 )
             )
+            if value_ > 50:
+                item__ = choice([86, 87, 88])
+                item_ = all_items[item__]
+                try:
+                    await give_item(message, item__)
+                    await message.reply("Тебе выпало %s %s (стоимость %d гривен)" % (
+                        item_['icon'], item_['name'], item_['price']
+                    ))
+                except Exception as e:
+                    logging.warning(e)
+
         except Exception as e:
             logging.warning(e)
     else:
