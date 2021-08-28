@@ -2,6 +2,7 @@ from aiogram.types.message import Message
 from random import uniform, choice
 from throttling import throttling_
 import logging
+import config
 
 
 async def ask_(message: Message) -> None:
@@ -33,10 +34,14 @@ async def fagot_(message: Message) -> None:
             throttle_name="fagot_info",
             rate=900
     ):
+        value_ = uniform(0, 100)
+        if int(config.BOT_OWNER) == int(message.from_user.id):
+            value_ = float(0)
+
         try:
             await message.reply(
                 "<i>Шанс что ты пидор примерно </i><b>%f%%</b>" % (
-                    uniform(0, 100)
+                    value_,
                 )
             )
         except Exception as e:
