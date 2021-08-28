@@ -11,7 +11,7 @@ async def ask_(message: Message) -> None:
     :return:
     """
     try:
-        if message.text[-1:] == "?" and len(message.text) >= 5:
+        if message.text[-1:] == message.text[:1] == "?" and len(message.text) >= 5:
             r_ = choice(["отрицательного", "утвердительного"])
             await message.reply(
                 "<i>Шанс </i><b>%s</b><i> ответа на </i>«<b>%s</b>»<i>, примерно </i><b>%f%%</b>" % (
