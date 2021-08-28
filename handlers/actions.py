@@ -252,8 +252,8 @@ async def dice_(message: types.Message):
             else:
                 item_ = await item_dice()
                 await give_item(message, item_['id'])
-                bot_msg = await message.reply("Тебе выпало %s %s (стоимость %d гривен) (%d)" % (
-                    item_['icon'], item_['name'], item_['price'], item_['id']
+                bot_msg = await message.reply("Тебе выпало %s %s (стоимость %d гривен)" % (
+                    item_['icon'], item_['name'], item_['price']
                 ))
         else:
             bot_msg = await message.reply("Тебе не повезло. Ничего не выпало... :(")
