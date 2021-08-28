@@ -11,6 +11,7 @@ from give import init_give
 from pay import init_pay
 from items import items_ as all_items
 from inventory import take_item, item_dice, give_item, take_all_items
+from entertainment import ask_
 from throttling import throttling_all
 from utils import human_format
 from .cleaner import cleaner_body
@@ -296,6 +297,7 @@ async def top_users(message: types.Message):
 @dp.message_handler(is_group=True)
 async def group_echo(message: types.Message):
     await private_balance_create(message, pass_check=True, cust_usr=message.from_user.id)
+    await ask_(message)
 
     if uniform(0, 1) >= 0.95:
         value_ = randint(5, 100)
