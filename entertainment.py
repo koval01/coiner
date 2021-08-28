@@ -18,7 +18,7 @@ async def ask_(message: Message) -> None:
             r_ = choice(["отрицательного", "утвердительного"])
             await message.reply(
                 "<i>Шанс </i><b>%s</b><i> ответа на </i>«<b>%s</b>»<i>, примерно </i><b>%f%%</b>" % (
-                    r_, message.text, uniform(0, 100)
+                    r_, message.text[1:], uniform(0, 100)
                 )
             )
     except Exception as e:
