@@ -41,4 +41,6 @@ async def fagot_(message: Message) -> None:
             )
         except Exception as e:
             logging.warning(e)
+    else:
+        await message.reply("Я ещё думаю на счёт тебя...")
 
