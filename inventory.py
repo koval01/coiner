@@ -50,7 +50,7 @@ async def item_dice() -> dict:
     """
     local_items_ = all_items[:]
     shuffle(local_items_)
-    for i in range(50):
+    for i in range(100):
         for i in local_items_:
             if i["chance_drop"] > uniform(0, 1) > uniform(0, 0.9):
                 return i
