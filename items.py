@@ -96,12 +96,20 @@ items_ = [
     {'id': 86, 'name': 'Стринги', 'price': 1, 'chance_drop': 0.0001, 'icon': '🔞'},
     {'id': 87, 'name': 'Портрет Путина', 'price': 1, 'chance_drop': 0.0001, 'icon': '🖼'},
     {'id': 88, 'name': 'Cum by Zelensky', 'price': 1, 'chance_drop': 0.0001, 'icon': '⚪️'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
-    # {'id': 38, 'name': 'Балтика 9', 'price': 50, 'chance_drop': 0.9, 'icon': '🍺'},
+    
+    {'id': 89, 'name': 'АК-74', 'price': 17999, 'chance_drop': 0.05, 'icon': '🔫'},
+    {'id': 90, 'name': 'Пистолет Макарова', 'price': 3901, 'chance_drop': 0.12, 'icon': '🔫'},
+    
+    {'id': 91, 'name': 'Фото разраба', 'price': 99999, 'chance_drop': 0.4, 'icon': '🖼'},
+    
+    {'id': 92, 'name': 'Кот', 'price': 560999, 'chance_drop': 0.2, 'icon': '🐈'},
+    {'id': 93, 'name': 'Собака', 'price': 499999, 'chance_drop': 0.35, 'icon': '🐶'},
+    
+    {'id': 94, 'name': 'Nokia 3310', 'price': 300, 'chance_drop': 0.9, 'icon': '📱'},
+    {'id': 95, 'name': 'iPhone 13 Pro', 'price': 1999888, 'chance_drop': 0.009, 'icon': '📱'},
+    {'id': 96, 'name': 'iPhone 12 Pro Max', 'price': 1777888, 'chance_drop': 0.018, 'icon': '📱'},
+    {'id': 97, 'name': 'iPhone 11', 'price': 1444999, 'chance_drop': 0.027, 'icon': '📱'},
+    {'id': 98, 'name': 'iPhone X', 'price': 1000999, 'chance_drop': 0.05, 'icon': '📱'},
+    {'id': 99, 'name': 'iPhone Y', 'price': 299, 'chance_drop': 0.9, 'icon': '📱'},
+    {'id': 100, 'name': 'Samsung Galaxy S3', 'price': 301, 'chance_drop': 0.9, 'icon': '📱'},
 ]
