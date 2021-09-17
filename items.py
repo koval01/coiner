@@ -112,4 +112,7 @@ items_ = [
     {'id': 98, 'name': 'iPhone X', 'price': 1000999, 'chance_drop': 0.05, 'icon': '📱'},
     {'id': 99, 'name': 'iPhone Y', 'price': 299, 'chance_drop': 0.9, 'icon': '📱'},
     {'id': 100, 'name': 'Samsung Galaxy S3', 'price': 301, 'chance_drop': 0.9, 'icon': '📱'},
+    
+    {'id': 101, 'name': 'Billy Pants', 'price': 300300, 'chance_drop': 0.09, 'icon': '🍓'},
+    {'id': 102, 'name': 'Поюзаный гандон', 'price': 5, 'chance_drop': 0.92, 'icon': '🍓'},
 ]
