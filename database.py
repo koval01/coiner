@@ -129,9 +129,9 @@ class PostSQL:
             'select slaves from wallet where user_id = %(user_id)s limit 1',
             {'user_id': self.user_id},
         )
-        result = self.cursor.fetchall()
+        result = self.cursor.fetchone()
         self.finish()
-        return result[0][0]
+        return result[0]
 
     def get_slave_owners(self) -> int:
         self.cursor.execute(
