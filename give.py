@@ -36,7 +36,7 @@ async def init_give(message: Message = None,
 
     # Уведомим получателя
     if not item_sell:
-        await notify_("На счёт было зачислено %d гривен от %s" % (
+        await notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>" % (
             sum_, name_
         ), user_)
 
