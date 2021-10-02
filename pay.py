@@ -53,7 +53,7 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
             return
 
         # Уведомим получателя
-        await notify_("На счёт было зачислено %d гривен от %s, комиссия %d%%" % (
+        await notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>, комиссия <b>%d%%</b>" % (
             com_result, name_, config.COM_TRANS
         ), user_)
 
