@@ -77,7 +77,7 @@ async def start_for_group(message: types.Message):
 async def wallet_private(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
-        await message.reply("Твой баланс: %d гривен\nНомер счёта: «%d»" % (data[2], data[3]))
+        await message.reply("Твой баланс: %d гривен\nНомер счёта: «<code>%d</code>»" % (data[2], data[3]))
 
 
 # И команда для групп конечно
@@ -85,7 +85,7 @@ async def wallet_private(message: types.Message):
 async def wallet_group(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).check_user()
-        bot_msg = await message.reply("Баланс группы: %d гривен\nНомер счёта группы: «%d»" % (data[2], data[3]))
+        bot_msg = await message.reply("Баланс группы: %d гривен\nНомер счёта группы: «<code>%d</code>»" % (data[2], data[3]))
         await cleaner_body(bot_msg)
 
 
@@ -100,7 +100,7 @@ async def pay_in_private(message: types.Message):
                 return
             x = await init_pay(message, s_, u_)
             if x:
-                await message.reply("Получатель: %d\nСумма: %d" % (
+                await message.reply("Получатель: <b>%d</b>\nСумма: <b>%d</b>" % (
                     u_, s_
                 ))
         except Exception as e:
@@ -124,7 +124,7 @@ async def user_slaves(message: types.Message):
     if await throttling_all(message):
         data = int(database.PostSQL(message).get_slaves(
             custom_user=message.from_user.id))
-        await message.reply("У тебя %d рабов\nДоход с них %d гривен в час" % (
+        await message.reply("У тебя <b>%d</b> рабов\nДоход с них <b>%d</b> гривен в час" % (
             data, data * config.PAY_PER_SLAVE
         ))
 
@@ -135,7 +135,7 @@ async def user_inventory(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL_Inventory(message).get_inventory()
         items_ = "\n".join(
-            ["(%d) %s %s (%d гривен)" %
+            ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
              (
                 i[1],
                 all_items[i[0]]["icon"],
@@ -165,7 +165,7 @@ async def sell__(message: types.Message):
             item_price = item__["price"]
             if x:
                 await init_give(message, item_price, item_sell=True)
-                await message.reply("Предмет %s %s был продан за %d гривен!" % (
+                await message.reply("Предмет %s <b>%s</b> был продан за <b>%d</b> гривен!" % (
                     item__["icon"], item__["name"], item_price
                 ))
         except Exception as e:
@@ -186,7 +186,7 @@ async def sell_all_items(message: types.Message):
             x = await take_all_items(message)
             if x:
                 await init_give(message, items_price, item_sell=True)
-                await message.reply("Предметы были проданы за %s гривен!" % human_format(items_price))
+                await message.reply("Предметы были проданы за <b>%s</b> гривен!" % human_format(items_price))
         except Exception as e:
             logging.info(e)
             await message.reply("Произошла ошибка, похоже что у тебя нет предметов.")
@@ -203,7 +203,7 @@ async def pay_group_admin(message: types.Message):
                 return
             x = await init_pay(message, s_, u_)
             if x:
-                await message.reply("Получатель: %d\nСумма: %d" % (
+                await message.reply("Получатель: <b>%d</b>\nСумма: <b>%d</b>" % (
                     u_, s_
                 ))
         except Exception as e:
@@ -227,7 +227,7 @@ async def give_money(message: types.Message):
             data = database.PostSQL(message).check_user(custom_user=u_)
             x = await init_give(message, s_, u_)
             if x:
-                await message.reply("Для %s было выдано %d гривен!" % (
+                await message.reply("Для <b>%s</b> было выдано <b>%d</b> гривен!" % (
                     data[1], s_
                 ))
         except Exception as e:
@@ -278,11 +278,11 @@ async def dice_(message: types.Message):
             if uniform(0, 1) > 0.3:
                 value_ = randint(1, 10) + (randint(30, 200) / uniform(2, 5))
                 database.PostSQL(message).modify_balance(value_, custom_user=message.from_user.id)
-                bot_msg = await message.reply("Тебе выпало %d гривен!" % value_)
+                bot_msg = await message.reply("Тебе выпало <b>%d</b> гривен!" % value_)
             else:
                 item_ = await item_dice()
                 await give_item(message, item_['id'])
-                bot_msg = await message.reply("Тебе выпало %s %s (стоимость %d гривен)" % (
+                bot_msg = await message.reply("Тебе выпало %s <b>%s</b> (стоимость <b>%d</b> гривен)" % (
                     item_['icon'], item_['name'], item_['price']
                 ))
         else:
@@ -296,7 +296,7 @@ async def top_users(message: types.Message):
     if await throttling_all(message):
         data = database.PostSQL(message).get_top_balance()
         top_ = "\n".join(
-            ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«%d»</b>" %
+            ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
              (i + 1, e[0], human_format(int(e[1])), e[2]) for i, e in enumerate(data)]
         )
         bot_msg = await message.reply("%s\n\n%s\n\n%s" % (
