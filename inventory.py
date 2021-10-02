@@ -17,13 +17,13 @@ async def give_item(message: Message, item_id: int) -> bool:
             database.PostSQL_Inventory(message).give_item(item_id)
             return True
         except Exception as e:
-            await message.reply("Не удалось выдать предмет через ошибку базы данных!")
+            await message.reply("Не удалось выдать предмет через <b>ошибку базы данных</b>!")
             logging.error(e)
     else:
         await message.reply(
             "У тебя максимум предметов, продай что-то."
-            " Продать что-то конкретное /sell *ID предмета*"
-            " или продать весь инвентарь /sellall"
+            " Продать что-то конкретное <b>/sell *ID предмета*</b>"
+            " или продать весь инвентарь <b>/sellall</b>"
         )
         return False
 
@@ -40,7 +40,7 @@ async def take_item(message: Message, item_id: int) -> bool:
             database.PostSQL_Inventory(message).take_item(item_id)
             return True
         except Exception as e:
-            await message.reply("Не удалось отобрать предмет через ошибку базы данных!")
+            await message.reply("Не удалось отобрать предмет через <b>ошибку базы данных</b>!")
             logging.error(e)
     else:
         await message.reply("Произошла ошибка!")
@@ -58,7 +58,7 @@ async def take_all_items(message: Message) -> bool:
             database.PostSQL_Inventory(message).clear_inventory()
             return True
         except Exception as e:
-            await message.reply("Не удалось отобрать предметы через ошибку базы данных!")
+            await message.reply("Не удалось отобрать предметы через <b>ошибку базы данных</b>!")
             logging.error(e)
     else:
         await message.reply("Произошла ошибка!")
