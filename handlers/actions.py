@@ -135,7 +135,7 @@ async def user_slaves(message: types.Message):
 @dp.message_handler(commands=['inventory'])
 async def user_inventory(message: types.Message):
     if await throttling_all(message):
-        data = database.PostSQL_Inventory(message).get_inventory
+        data = database.PostSQL_Inventory(message).get_inventory()
         items_ = "\n".join(
             ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
              (
