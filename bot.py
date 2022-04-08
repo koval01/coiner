@@ -2,10 +2,9 @@ import asyncio
 
 from aiogram import executor
 
-import slaves_sc
-import handlers
+from special import slaves_sc
 from dispatcher import dp
-from throttling import ThrottlingMiddleware
+from special.throttling import ThrottlingMiddleware
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

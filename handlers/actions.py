@@ -6,15 +6,15 @@ from aiogram.types.message import Message
 
 import config
 import database
-from buy_slave import init_transaction_ as slave_buy_
+from additional.buy_slave import init_transaction_ as slave_buy_
 from dispatcher import dp
-from entertainment import ask_, fagot_
-from give import init_give
-from inventory import take_item, item_dice, give_item, take_all_items
-from items import items_ as all_items
-from pay import init_pay
-from throttling import rate_limit
-from utils import human_format
+from additional.entertainment import ask_, fagot_
+from additional.give import init_give
+from additional.inventory import take_item, item_dice, give_item, take_all_items
+from additional.items import items_ as all_items
+from additional.pay import init_pay
+from special.throttling import rate_limit
+from special.utils import human_format
 from .cleaner import cleaner_body
 
 
