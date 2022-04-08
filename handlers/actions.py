@@ -301,7 +301,7 @@ async def top_users(message: types.Message):
         data = database.PostSQL(message).get_top_balance
         top_ = "\n".join(
             ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
-             (i + 1, e["id"], human_format(int(e["balance"])), e["user_id"]) for i, e in enumerate(data)]
+             (i + 1, e["user_id"], human_format(int(e["balance"])), e["user_id"]) for i, e in enumerate(data)]
         )
         bot_msg = await message.reply("%s\n\n%s\n\n%s" % (
             "<b>- Топ 10 -</b>", top_,
