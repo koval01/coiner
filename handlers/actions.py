@@ -129,7 +129,7 @@ async def user_slaves(message: types.Message):
     #     custom_user=message.from_user.id))
     _data = database.PostSQL(message).get_slaves(
         custom_user=message.from_user.id)
-    await message.reply(_data, type(_data), repr(_data))
+    print(_data, type(_data), repr(_data))
     await message.reply("У тебя <b>%d</b> рабов\nДоход с них <b>%d</b> гривен в час" % (
         data, data * config.PAY_PER_SLAVE
     ))
