@@ -62,10 +62,10 @@ async def start_for_private(message: types.Message):
 @dp.message_handler(commands=['start'], is_group=True)
 async def start_for_group(message: types.Message):
     if await throttling_all(message):
-        if database.PostSQL(message).check_user:
+        if database.PostSQL(message).check_user():
             await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance)
         else:
-            database.PostSQL(message).add_user
+            database.PostSQL(message).add_user()
             database.PostSQL(message).modify_balance(config.START_BALANCE)
             await message.reply(
                 "Счёт группы успешно создан. Также на баланс группы было начислено <b>%d</b> гривен!" %
