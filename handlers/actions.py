@@ -155,7 +155,7 @@ async def user_inventory(message: types.Message):
 async def sell__(message: types.Message):
     if await throttling_all(message):
         try:
-            item_id = int(message.text.split[1])
+            item_id = int(message.text.split()[1])
             data_ = database.PostSQL_Inventory(message).get_item(item_id)
             if int(data_["owner_id"]) != message.from_user.id:
                 await message.reply("Мне кажется или этот предмет не твой"
