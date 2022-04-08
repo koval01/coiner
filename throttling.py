@@ -6,7 +6,7 @@ from dispatcher import dp
 
 
 async def throttling_(msg: Message, throttle_name: str = "throttle_all",
-                      rate: int = 0.4) -> bool:
+                      rate: int = 0.3) -> bool:
     try:
         await dp.throttle(throttle_name, rate=rate)
     except Throttled:
