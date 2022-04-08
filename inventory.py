@@ -57,7 +57,7 @@ async def take_all_items(message: Message) -> bool:
     """
     if len(database.PostSQL_Inventory(message).get_inventory()) != 0:
         try:
-            database.PostSQL_Inventory(message).clear_inventory
+            database.PostSQL_Inventory(message).clear_inventory()
             return True
         except Exception as e:
             await message.reply("Не удалось отобрать предметы через <b>ошибку базы данных</b>!")
