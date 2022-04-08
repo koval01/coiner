@@ -1,7 +1,7 @@
 from aiogram.types.message import Message
 from random import uniform, choice
-from .items import items_ as all_items
-from .inventory import give_item
+from items import items_ as all_items
+from inventory import give_item
 import logging
 import config
 

@@ -1,5 +1,8 @@
 import asyncio
 
+import additional
+import special
+
 from aiogram import executor
 
 from dispatcher import dp
