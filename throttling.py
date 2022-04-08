@@ -84,7 +84,7 @@ class ThrottlingMiddleware(BaseMiddleware):
 
         # Prevent flooding
         if throttled.exceeded_count <= 2:
-            await message.reply('Too many requests! ')
+            await message.reply('Слишком много запросов!')
 
         # Sleep.
         await asyncio.sleep(delta)
@@ -94,4 +94,4 @@ class ThrottlingMiddleware(BaseMiddleware):
 
         # If current message is not last with current key - do not send message
         if thr.exceeded_count == throttled.exceeded_count:
-            await message.reply('Unlocked.')
+            await message.reply('Можно пользоваться снова.')
