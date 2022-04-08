@@ -248,7 +248,7 @@ async def give_money_no_access(message: types.Message):
 
 # Проверка на пидораса
 @dp.message_handler(commands=['fagot'], is_group=True)
-@rate_limit(5, 'fagot_test')
+@rate_limit(600, 'fagot_test')
 async def fagot_check(message: types.Message):
     await fagot_(message)
 
