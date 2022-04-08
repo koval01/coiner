@@ -12,7 +12,7 @@ class PostSQL:
             dbname=DB_NAME, user=DB_USER,
             password=DB_PASS, host=DB_HOST
         )
-        self.cursor = self.conn.cursor()
+        self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         self.taker = lambda x: "-" if x else "+"
 
         try:
@@ -146,7 +146,7 @@ class PostSQL_ChatManager:
             dbname=DB_NAME, user=DB_USER,
             password=DB_PASS, host=DB_HOST
         )
-        self.cursor = self.conn.cursor()
+        self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         if msg.chat.type in ["group", "supergroup"]:
             self.chat_id = msg.chat.id
@@ -201,7 +201,7 @@ class PostSQL_Inventory:
             dbname=DB_NAME, user=DB_USER,
             password=DB_PASS, host=DB_HOST
         )
-        self.cursor = self.conn.cursor()
+        self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         self.user_id = msg.from_user.id
         self.name = msg.from_user.first_name
