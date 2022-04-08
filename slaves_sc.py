@@ -11,11 +11,11 @@ async def slaves_() -> None:
     owners = database.PostSQL().get_slave_owners
     for i in owners:
         data = int(database.PostSQL().get_slaves(
-            custom_user=i[0]))
+            custom_user=i["user_id"]))
         add_ = data * config.PAY_PER_SLAVE
         await init_give(
             None, sum_=add_, custom_name="рабы",
-            user_=i[0],
+            user_=i["user_id"],
         )
 
 
