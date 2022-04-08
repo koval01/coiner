@@ -4,7 +4,7 @@ import aioschedule as schedule
 
 import config
 import database
-from give import init_give
+from additional.give import init_give
 
 
 async def slaves_() -> None:
