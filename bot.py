@@ -3,6 +3,7 @@ import asyncio
 from aiogram import executor
 
 import slaves_sc
+import handlers
 from dispatcher import dp
 from throttling import ThrottlingMiddleware
 
