@@ -2,8 +2,8 @@ import asyncio
 
 from aiogram import executor
 
-from special import slaves_sc
 from dispatcher import dp
+from special import slaves_sc
 from special.throttling import ThrottlingMiddleware
 
 if __name__ == "__main__":
