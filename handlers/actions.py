@@ -186,7 +186,7 @@ async def sell_all_items(message: types.Message):
     if await throttling_all(message):
         try:
             items_price = sum(
-                [all_items[el["id"]]["price"] for el in database.PostSQL_Inventory(message).get_inventory])
+                [all_items[el["id"]]["price"] for el in database.PostSQL_Inventory(message).get_inventory()])
             x = await take_all_items(message)
             if x:
                 await init_give(message, items_price, item_sell=True)
