@@ -77,7 +77,7 @@ async def start_for_group(message: types.Message):
 @dp.message_handler(commands=['wallet'], is_private=True)
 async def wallet_private(message: types.Message):
     if await throttling_all(message):
-        data = database.PostSQL(message).check_user
+        data = database.PostSQL(message).check_user()
         await message.reply("Твой баланс: %d гривен\nНомер счёта: «<code>%d</code>»" % (data[2], data[3]))
 
 
@@ -85,7 +85,7 @@ async def wallet_private(message: types.Message):
 @dp.message_handler(commands=['wallet'], is_group=True)
 async def wallet_group(message: types.Message):
     if await throttling_all(message):
-        data = database.PostSQL(message).check_user
+        data = database.PostSQL(message).check_user()
         bot_msg = await message.reply(
             "Баланс группы: %d гривен\nНомер счёта группы: «<code>%d</code>»" % (data[2], data[3]))
         await cleaner_body(bot_msg)
