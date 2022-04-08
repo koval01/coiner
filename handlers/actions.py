@@ -125,8 +125,8 @@ async def buy_slave_private(message: types.Message):
 @dp.message_handler(commands=['slaves'])
 @rate_limit(1, 'slaves_count')
 async def user_slaves(message: types.Message):
-    data = int(database.PostSQL(message).get_slaves(
-        custom_user=message.from_user.id))
+    # data = int(database.PostSQL(message).get_slaves(
+    #     custom_user=message.from_user.id))
     _data = database.PostSQL(message).get_slaves(
         custom_user=message.from_user.id)
     await message.reply(_data, type(_data), repr(_data))
