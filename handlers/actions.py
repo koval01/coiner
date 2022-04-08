@@ -164,7 +164,7 @@ async def sell__(message: types.Message):
                 return
 
             x = await take_item(message, item_id)
-            item__ = all_items[int(data_["id"])]
+            item__ = all_items[int(data_["item_id"])]
             item_price = item__["price"]
             if x:
                 await init_give(message, item_price, item_sell=True)
