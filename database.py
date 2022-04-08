@@ -1,6 +1,7 @@
 import logging
 
 import psycopg2
+import psycopg2.extras
 from aiogram.types.message import Message
 
 from config import DB_HOST, DB_NAME, DB_PASS, DB_USER
