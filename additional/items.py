@@ -1,9 +1,9 @@
 items_ = [
-    {'id': 0, 'name': 'Флаг Украины', 'price': 1999, 'chance_drop': 0.4, 'icon': '🇺🇦'},
-    {'id': 1, 'name': 'Флаг России', 'price': 1111, 'chance_drop': 0.8, 'icon': '🇷🇺'},
-    {'id': 2, 'name': 'Флаг Беларуси', 'price': 1500, 'chance_drop': 0.75, 'icon': '🇧🇾'},
-    {'id': 3, 'name': 'Флаг США', 'price': 15000, 'chance_drop': 0.1, 'icon': '🇺🇸'},
-    {'id': 4, 'name': 'Флаг Таджикистана', 'price': 400, 'chance_drop': 0.5, 'icon': '🇹🇯'},
+    {'id': 0, 'name': 'Флаг Украины', 'price': 79999, 'chance_drop': 0.03, 'icon': '🇺🇦'},
+    {'id': 1, 'name': 'Флаг России', 'price': 1, 'chance_drop': 0.8, 'icon': '🇷🇺'},
+    {'id': 2, 'name': 'Флаг Беларуси', 'price': 9999, 'chance_drop': 0.75, 'icon': '🇧🇾'},
+    {'id': 3, 'name': 'Флаг США', 'price': 25000, 'chance_drop': 0.1, 'icon': '🇺🇸'},
+    {'id': 4, 'name': 'Флаг Таджикистана', 'price': 800, 'chance_drop': 0.5, 'icon': '🇹🇯'},
     {'id': 5, 'name': 'Флаг Узбекистана', 'price': 400, 'chance_drop': 0.5, 'icon': '🇺🇿'},
     {'id': 6, 'name': 'Флаг Арабских Эмиратов', 'price': 50000, 'chance_drop': 0.1, 'icon': '🇦🇪'},
     {'id': 7, 'name': 'Флаг Канады', 'price': 200, 'chance_drop': 0.7, 'icon': '🇨🇦'},
@@ -104,7 +104,7 @@ items_ = [
     
     {'id': 92, 'name': 'Кот', 'price': 560999, 'chance_drop': 0.2, 'icon': '🐈'},
     {'id': 93, 'name': 'Собака', 'price': 499999, 'chance_drop': 0.35, 'icon': '🐶'},
-    
+
     {'id': 94, 'name': 'Nokia 3310', 'price': 300, 'chance_drop': 0.9, 'icon': '📱'},
     {'id': 95, 'name': 'iPhone 13 Pro', 'price': 1999888, 'chance_drop': 0.009, 'icon': '📱'},
     {'id': 96, 'name': 'iPhone 12 Pro Max', 'price': 1777888, 'chance_drop': 0.018, 'icon': '📱'},
@@ -112,7 +112,9 @@ items_ = [
     {'id': 98, 'name': 'iPhone X', 'price': 1000999, 'chance_drop': 0.05, 'icon': '📱'},
     {'id': 99, 'name': 'iPhone Y', 'price': 299, 'chance_drop': 0.9, 'icon': '📱'},
     {'id': 100, 'name': 'Samsung Galaxy S3', 'price': 301, 'chance_drop': 0.9, 'icon': '📱'},
-    
+
     {'id': 101, 'name': 'Billy Pants', 'price': 300300, 'chance_drop': 0.09, 'icon': '🍓'},
     {'id': 102, 'name': 'Поюзаный гандон', 'price': 5, 'chance_drop': 0.92, 'icon': '🍓'},
+
+    {'id': 103, 'name': 'Флаг ЛГБТ', 'price': 300, 'chance_drop': 0.6, 'icon': '🏳️‍🌈'},
 ]
