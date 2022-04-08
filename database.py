@@ -129,7 +129,7 @@ class PostSQL:
         )
         result = self.cursor.fetchone()
         self.finish
-        return result["slaves"]
+        return result
 
     @property
     def get_slave_owners(self) -> int:
