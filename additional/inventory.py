@@ -4,7 +4,7 @@ from random import uniform, choice, shuffle
 from aiogram.types.message import Message
 
 import database
-from items import items_ as all_items
+from additional.items import items_ as all_items
 
 
 async def give_item(message: Message, item_id: int) -> bool:

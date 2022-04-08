@@ -1,9 +1,11 @@
-from aiogram.types.message import Message
-from random import uniform, choice
-from items import items_ as all_items
-from inventory import give_item
 import logging
+from random import uniform, choice
+
+from aiogram.types.message import Message
+
 import config
+from additional.inventory import give_item
+from additional.items import items_ as all_items
 
 
 async def ask_(message: Message) -> None:

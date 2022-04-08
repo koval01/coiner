@@ -8,11 +8,11 @@ DB_NAME = os.environ.get("DB_NAME", None)
 DB_USER = os.environ.get("DB_USER", None)
 DB_PASS = os.environ.get("DB_PASS", None)
 
-START_BALANCE = 250
+START_BALANCE = 300
 SLAVE_PRICE_PRC = 30
 SLAVE_PRICE = 2700
 PAY_PER_SLAVE = 290
-COM_TRANS = 4  # 4 процента комиссии
+COM_TRANS = 6  # 4 процента комиссии
 CLEANER = False
 
 BOT_INFO = """
