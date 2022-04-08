@@ -1,17 +1,18 @@
 import logging
+from random import uniform, randint
+
 from aiogram import types
 from aiogram.types.message import Message
-from random import uniform, randint
 
 import config
 import database
 from buy_slave import init_transaction_ as slave_buy_
 from dispatcher import dp
-from give import init_give
-from pay import init_pay
-from items import items_ as all_items
-from inventory import take_item, item_dice, give_item, take_all_items
 from entertainment import ask_, fagot_
+from give import init_give
+from inventory import take_item, item_dice, give_item, take_all_items
+from items import items_ as all_items
+from pay import init_pay
 from throttling import throttling_ as throttling_all
 from utils import human_format
 from .cleaner import cleaner_body
@@ -61,10 +62,10 @@ async def start_for_private(message: types.Message):
 @dp.message_handler(commands=['start'], is_group=True)
 async def start_for_group(message: types.Message):
     if await throttling_all(message):
-        if database.PostSQL(message).check_user():
-            await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance())
+        if database.PostSQL(message).check_user:
+            await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance)
         else:
-            database.PostSQL(message).add_user()
+            database.PostSQL(message).add_user
             database.PostSQL(message).modify_balance(config.START_BALANCE)
             await message.reply(
                 "Счёт группы успешно создан. Также на баланс группы было начислено <b>%d</b> гривен!" %
@@ -76,7 +77,7 @@ async def start_for_group(message: types.Message):
 @dp.message_handler(commands=['wallet'], is_private=True)
 async def wallet_private(message: types.Message):
     if await throttling_all(message):
-        data = database.PostSQL(message).check_user()
+        data = database.PostSQL(message).check_user
         await message.reply("Твой баланс: %d гривен\nНомер счёта: «<code>%d</code>»" % (data[2], data[3]))
 
 
@@ -84,8 +85,9 @@ async def wallet_private(message: types.Message):
 @dp.message_handler(commands=['wallet'], is_group=True)
 async def wallet_group(message: types.Message):
     if await throttling_all(message):
-        data = database.PostSQL(message).check_user()
-        bot_msg = await message.reply("Баланс группы: %d гривен\nНомер счёта группы: «<code>%d</code>»" % (data[2], data[3]))
+        data = database.PostSQL(message).check_user
+        bot_msg = await message.reply(
+            "Баланс группы: %d гривен\nНомер счёта группы: «<code>%d</code>»" % (data[2], data[3]))
         await cleaner_body(bot_msg)
 
 
@@ -133,14 +135,14 @@ async def user_slaves(message: types.Message):
 @dp.message_handler(commands=['inventory'])
 async def user_inventory(message: types.Message):
     if await throttling_all(message):
-        data = database.PostSQL_Inventory(message).get_inventory()
+        data = database.PostSQL_Inventory(message).get_inventory
         items_ = "\n".join(
             ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
              (
-                i[1],
-                all_items[i[0]]["icon"],
-                all_items[i[0]]["name"],
-                all_items[i[0]]["price"]
+                 i[1],
+                 all_items[i[0]]["icon"],
+                 all_items[i[0]]["name"],
+                 all_items[i[0]]["price"]
              ) for i in data]
         )
         bot_msg = await message.reply("%s\n\nСлотов занято: <b>%d/50</b>" % (items_, len(data)))
@@ -152,7 +154,7 @@ async def user_inventory(message: types.Message):
 async def sell__(message: types.Message):
     if await throttling_all(message):
         try:
-            item_id = int(message.text.split()[1])
+            item_id = int(message.text.split[1])
             data_ = database.PostSQL_Inventory(message).get_item(item_id)
             if int(data_[2]) != message.from_user.id:
                 await message.reply("Мне кажется или этот предмет не твой"
@@ -182,7 +184,7 @@ async def sell__(message: types.Message):
 async def sell_all_items(message: types.Message):
     if await throttling_all(message):
         try:
-            items_price = sum([all_items[el[0]]["price"] for el in database.PostSQL_Inventory(message).get_inventory()])
+            items_price = sum([all_items[el[0]]["price"] for el in database.PostSQL_Inventory(message).get_inventory])
             x = await take_all_items(message)
             if x:
                 await init_give(message, items_price, item_sell=True)
@@ -294,7 +296,7 @@ async def dice_(message: types.Message):
 @dp.message_handler(commands=['top'])
 async def top_users(message: types.Message):
     if await throttling_all(message):
-        data = database.PostSQL(message).get_top_balance()
+        data = database.PostSQL(message).get_top_balance
         top_ = "\n".join(
             ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
              (i + 1, e[0], human_format(int(e[1])), e[2]) for i, e in enumerate(data)]
@@ -302,7 +304,7 @@ async def top_users(message: types.Message):
         bot_msg = await message.reply("%s\n\n%s\n\n%s" % (
             "<b>- Топ 10 -</b>", top_,
             "<i>Общая сумма у всех пользователей бота</i> <code>%s</code> <b>гривен</b>" %
-            human_format(int(database.PostSQL(message).get_sum_balance()))
+            human_format(int(database.PostSQL(message).get_sum_balance))
         ))
         await cleaner_body(bot_msg)
 

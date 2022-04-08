@@ -1,4 +1,5 @@
 import logging
+
 from aiogram.types.message import Message
 
 import config
@@ -21,7 +22,7 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
             await message.reply("Ошибка, не удалось найти получателя.")
             return
 
-        if int(database.PostSQL(message).check_user()[2]) < sum_:
+        if int(database.PostSQL(message).check_user[2]) < sum_:
             await message.reply("Недостаточно гривен!")
             return
 

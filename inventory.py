@@ -1,8 +1,10 @@
 import logging
-from aiogram.types.message import Message
-from items import items_ as all_items
 from random import uniform, choice, shuffle
+
+from aiogram.types.message import Message
+
 import database
+from items import items_ as all_items
 
 
 async def give_item(message: Message, item_id: int) -> bool:
@@ -12,7 +14,7 @@ async def give_item(message: Message, item_id: int) -> bool:
     :param item_id: Айди предмета который нужно выдать
     :return: Success bool
     """
-    if len(database.PostSQL_Inventory(message).get_inventory()) < 50:
+    if len(database.PostSQL_Inventory(message).get_inventory) < 50:
         try:
             database.PostSQL_Inventory(message).give_item(item_id)
             return True
@@ -35,7 +37,7 @@ async def take_item(message: Message, item_id: int) -> bool:
     :param item_id: Айди предмета который нужно выдать
     :return: Success bool
     """
-    if len(database.PostSQL_Inventory(message).get_inventory()) != 0:
+    if len(database.PostSQL_Inventory(message).get_inventory) != 0:
         try:
             database.PostSQL_Inventory(message).take_item(item_id)
             return True
@@ -53,9 +55,9 @@ async def take_all_items(message: Message) -> bool:
     :param message: Тело сообщения
     :return: Success bool
     """
-    if len(database.PostSQL_Inventory(message).get_inventory()) != 0:
+    if len(database.PostSQL_Inventory(message).get_inventory) != 0:
         try:
-            database.PostSQL_Inventory(message).clear_inventory()
+            database.PostSQL_Inventory(message).clear_inventory
             return True
         except Exception as e:
             await message.reply("Не удалось отобрать предметы через <b>ошибку базы данных</b>!")

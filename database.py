@@ -1,4 +1,5 @@
 import logging
+
 import psycopg2
 from aiogram.types.message import Message
 
@@ -12,6 +13,7 @@ class PostSQL:
             password=DB_PASS, host=DB_HOST
         )
         self.cursor = self.conn.cursor()
+        self.taker = lambda x: "-" if x else "+"
 
         try:
             #  Проверяем есть ли message
@@ -32,6 +34,7 @@ class PostSQL:
         except Exception as e:
             logging.debug(e)
 
+    @property
     def finish(self) -> None:
         self.cursor.close()
         self.conn.close()
@@ -44,7 +47,7 @@ class PostSQL:
                 {'user_id': self.user_id},
             )
             result = self.cursor.fetchall()
-            self.finish()
+            self.finish
             return result[0]
         except Exception as e:
             logging.debug(e)
@@ -60,7 +63,7 @@ class PostSQL:
             }
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
     def get_balance(self, custom_user=0) -> int:
         if custom_user: self.user_id = custom_user
@@ -69,23 +72,25 @@ class PostSQL:
             {'user_id': self.user_id},
         )
         result = self.cursor.fetchall()
-        self.finish()
+        self.finish
         return result[0][0]
 
+    @property
     def get_sum_balance(self) -> int:
         self.cursor.execute(
             'select sum(balance) from wallet limit 1',
         )
         result = self.cursor.fetchall()
-        self.finish()
+        self.finish
         return result[0][0]
 
+    @property
     def get_top_balance(self) -> int:
         self.cursor.execute(
             'select name, balance, user_id from wallet order by balance desc limit 10',
         )
         result = self.cursor.fetchall()
-        self.finish()
+        self.finish
         return result
 
     def modify_name_(self, name, custom_user=0) -> None:
@@ -95,33 +100,25 @@ class PostSQL:
             {'user_id': self.user_id, 'name': name},
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
     def modify_balance(self, coins, take=False, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
-        if take:
-            x = "-"
-        else:
-            x = "+"
         self.cursor.execute(
-            f'update wallet set balance = balance {x} %(coins)s where user_id = %(user_id)s',
+            f'update wallet set balance = balance {self.taker(take)} %(coins)s where user_id = %(user_id)s',
             {'user_id': self.user_id, 'coins': coins},
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
     def modify_slaves(self, slaves=1, take=False, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
-        if take:
-            x = "-"
-        else:
-            x = "+"
         self.cursor.execute(
-            f'update wallet set slaves = slaves {x} %(slaves)s where user_id = %(user_id)s',
+            f'update wallet set slaves = slaves {self.taker(take)} %(slaves)s where user_id = %(user_id)s',
             {'user_id': self.user_id, 'slaves': slaves},
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
     def get_slaves(self, custom_user=0) -> int:
         if custom_user: self.user_id = custom_user
@@ -130,15 +127,16 @@ class PostSQL:
             {'user_id': self.user_id},
         )
         result = self.cursor.fetchone()
-        self.finish()
+        self.finish
         return result[0]
 
+    @property
     def get_slave_owners(self) -> int:
         self.cursor.execute(
             'select user_id, slaves from wallet where slaves > 0',
         )
         result = self.cursor.fetchall()
-        self.finish()
+        self.finish
         return result
 
 
@@ -157,19 +155,22 @@ class PostSQL_ChatManager:
         elif msg.chat.type == "private":
             return
 
+    @property
     def finish(self) -> None:
         self.cursor.close()
         self.conn.close()
 
+    @property
     def get_last_message(self) -> list:
         self.cursor.execute(
             'select chat_id, last_message_id from chat where chat_id = %(chat_id)s limit 1',
             {'chat_id': self.chat_id}
         )
         result = self.cursor.fetchall()
-        self.finish()
+        self.finish
         return result[0]
 
+    @property
     def add_new_chat(self) -> None:
         self.cursor.execute(
             'insert into chat(chat_id, last_message_id) values (%(chat)s, %(last)s);',
@@ -179,8 +180,9 @@ class PostSQL_ChatManager:
             }
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
+    @property
     def modify_last(self) -> None:
         self.cursor.execute(
             'update chat set last_message_id = %(last)s where chat_id = %(chat)s',
@@ -190,7 +192,7 @@ class PostSQL_ChatManager:
             },
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
 
 class PostSQL_Inventory:
@@ -207,6 +209,7 @@ class PostSQL_Inventory:
 
         # Inventory for only private chats IDs
 
+    @property
     def finish(self) -> None:
         self.cursor.close()
         self.conn.close()
@@ -218,7 +221,7 @@ class PostSQL_Inventory:
             {'user_id': self.user_id},
         )
         result = self.cursor.fetchall()
-        self.finish()
+        self.finish
         return result
 
     def get_item(self, item_id_row, custom_user=0) -> int:
@@ -228,7 +231,7 @@ class PostSQL_Inventory:
             {'item_id': item_id_row},
         )
         result = self.cursor.fetchall()
-        self.finish()
+        self.finish
         return result[0]
 
     def give_item(self, item_id) -> None:
@@ -240,7 +243,7 @@ class PostSQL_Inventory:
             }
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
     def take_item(self, item_id_row) -> None:
         self.cursor.execute(
@@ -250,7 +253,7 @@ class PostSQL_Inventory:
             }
         )
         self.conn.commit()
-        self.finish()
+        self.finish
 
     def clear_inventory(self, owner_items: int = 0) -> None:
         if not owner_items:
@@ -262,4 +265,4 @@ class PostSQL_Inventory:
             }
         )
         self.conn.commit()
-        self.finish()
+        self.finish

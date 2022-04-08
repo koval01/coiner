@@ -1,5 +1,6 @@
-import aioschedule as schedule
 import asyncio
+
+import aioschedule as schedule
 
 import config
 import database
@@ -7,7 +8,7 @@ from give import init_give
 
 
 async def slaves_() -> None:
-    owners = database.PostSQL().get_slave_owners()
+    owners = database.PostSQL().get_slave_owners
     for i in owners:
         data = int(database.PostSQL().get_slaves(
             custom_user=i[0]))
