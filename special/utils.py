@@ -1,4 +1,5 @@
 import logging
+import regex as re
 from aiogram.types.message import Message
 
 from dispatcher import bot
@@ -89,3 +90,11 @@ def number_to_words(number: int) -> str:
         return b.get(number)
     else:
         return 'Число вне диапазона среза!'
+
+
+def cleaner_name(name: str) -> str:
+    r = re.sub(r"[^A-Za-z0-9А-Яа-яёіїєґ]*", "", name)
+    if len(r) != 0:
+        return r
+    else:
+        return "🤷‍♂️"
