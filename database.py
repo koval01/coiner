@@ -91,8 +91,9 @@ class PostSQL:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'update wallet set dice_on = %(status)s where user_id = %(user_id)s',
-            {'user_id': self.user_id, 'status': str(status).lower()},
+            {'user_id': self.user_id, 'status': status},
         )
+        self.conn.commit()
         self.finish
 
     @property
