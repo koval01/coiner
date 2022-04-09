@@ -73,9 +73,19 @@ class PostSQL:
             'select balance from wallet where user_id = %(user_id)s limit 1',
             {'user_id': self.user_id},
         )
-        result = self.cursor.fetchall()
+        result = self.cursor.fetchone()
         self.finish
-        return result[0][0]
+        return result["balance"]
+
+    def get_dice_on(self, custom_user=0) -> float:
+        if custom_user: self.user_id = custom_user
+        self.cursor.execute(
+            'select dice_on from wallet where user_id = %(user_id)s limit 1',
+            {'user_id': self.user_id},
+        )
+        result = self.cursor.fetchone()
+        self.finish
+        return result["dice_on"]
 
     @property
     def get_sum_balance(self) -> int:

@@ -117,4 +117,7 @@ items_ = [
     {'id': 102, 'name': 'Поюзаный гандон', 'price': 5, 'chance_drop': 0.92, 'icon': '🍓'},
 
     {'id': 103, 'name': 'Флаг ЛГБТ', 'price': 300, 'chance_drop': 0.6, 'icon': '🏳️‍🌈'},
+    {'id': 104, 'name': 'Bratishkinoff\'s cum', 'price': 50000, 'chance_drop': 0.12, 'icon': '⚪️'},
+    {'id': 105, 'name': 'JesusAVGN\'s cum', 'price': 90000, 'chance_drop': 0.08, 'icon': '⚪️'},
+    {'id': 106, 'name': 'Труханы Гайки', 'price': 4, 'chance_drop': 0.08, 'icon': '👙'},
 ]
