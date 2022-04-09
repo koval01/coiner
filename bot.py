@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from aiogram import executor
 
@@ -8,7 +9,9 @@ from special.throttling import ThrottlingMiddleware
 
 import handlers
 
+
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     loop = asyncio.get_event_loop()
     loop.create_task(slaves_sc.scheduler())
     dp.middleware.setup(ThrottlingMiddleware())
