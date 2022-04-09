@@ -223,7 +223,7 @@ async def dice_switch_group_admin(message: types.Message):
         database.PostSQL(message).update_dice_on(message.chat.id, status=False)
         await message.reply("Теперь в этой группе <b>нельзя</b> использовать dice")
     else:
-        database.PostSQL(message).update_dice_on(message.chat.id)
+        database.PostSQL(message).update_dice_on(message.chat.id, status=True)
         await message.reply("Теперь в этой группе <b>можно</b> использовать dice")
 
 
