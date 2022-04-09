@@ -247,7 +247,7 @@ async def give_money(message: types.Message):
     try:
         u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
         data = database.PostSQL(message).check_user(custom_user=u_)
-        x = await init_give(message, s_, u_)
+        x = await init_give(message, s_, u_, "Администрация")
         if x:
             await message.reply("Для <b>%s</b> было выдано <b>%d</b> гривен!" % (
                 data["name"], s_
