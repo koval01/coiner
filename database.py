@@ -76,7 +76,7 @@ class PostSQL:
         )
         result = self.cursor.fetchone()
         self.finish
-        return result[0]
+        return result["balance"]
 
     def get_dice_on(self, custom_user=0) -> float:
         if custom_user: self.user_id = custom_user
@@ -86,7 +86,7 @@ class PostSQL:
         )
         result = self.cursor.fetchone()
         self.finish
-        return result[0]
+        return result["dice_on"]
 
     def update_dice_on(self, custom_user=0, status: bool = True) -> None:
         if custom_user: self.user_id = custom_user
