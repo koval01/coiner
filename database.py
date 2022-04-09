@@ -87,7 +87,7 @@ class PostSQL:
         self.finish
         return result["dice_on"]
 
-    def update_dice_on(self, custom_user=0, status=True) -> None:
+    def update_dice_on(self, custom_user=0, status: bool = True) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'update wallet set dice_on = %(status)s where user_id = %(user_id)s',
