@@ -280,7 +280,7 @@ async def bot_faq(message: types.Message):
 async def dice_(message: types.Message):
     if message.chat.type in ["group", "supergroup"]:
         # if database.PostSQL(message).get_dice_on(custom_user=message.from_user.id):
-        print(database.PostSQL(message).get_dice_on(custom_user=message.from_user.id))
+        print(database.PostSQL(message).get_dice_on(custom_user=message.chat.id))
     if uniform(0, 1) >= 0.4:
         if uniform(0, 1) > 0.3:
             value_ = randint(1, 10) + (randint(30, 200) / uniform(2, 5))
