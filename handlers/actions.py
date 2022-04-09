@@ -3,6 +3,7 @@ from random import uniform, randint
 
 from aiogram import types
 from aiogram.types.message import Message
+from aiogram.utils.exceptions import Throttled
 
 import config
 import database
@@ -279,8 +280,14 @@ async def bot_faq(message: types.Message):
 @rate_limit(0.3, 'dice')
 async def dice_(message: types.Message):
     if message.chat.type in ["group", "supergroup"]:
-        # if database.PostSQL(message).get_dice_on(custom_user=message.from_user.id):
-        print(database.PostSQL(message).get_dice_on(custom_user=message.chat.id))
+        if not database.PostSQL(message).get_dice_on(custom_user=message.from_user.id):
+            try:
+                await dp.throttle('dice_disabled', rate=10)
+            except Throttled:
+                pass
+            else:
+                await message.reply("Администрация этой группы отключила команду dice")
+            return
     if uniform(0, 1) >= 0.4:
         if uniform(0, 1) > 0.3:
             value_ = randint(1, 10) + (randint(30, 200) / uniform(2, 5))
