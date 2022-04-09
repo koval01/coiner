@@ -1,5 +1,6 @@
 import logging
 import regex as re
+from string import punctuation
 from aiogram.types.message import Message
 
 from dispatcher import bot
@@ -93,7 +94,7 @@ def number_to_words(number: int) -> str:
 
 
 def cleaner_name(name: str) -> str:
-    r = re.sub(r"[^A-Za-z0-9А-Яа-яёіїєґЯЁІЇЄҐ\s]*", "", name)
+    r = re.sub(r"[^A-Za-z0-9А-Яа-яёіїєґЯЁІЇЄҐ\s%s]*" % punctuation, "", name)
     if len(r) >= 24:
         r = r[:24]
     if len(r) != 0:
