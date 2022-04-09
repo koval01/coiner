@@ -216,11 +216,28 @@ async def pay_group_admin(message: types.Message):
         await message.reply("/pay *получатель* *сумма*")
 
 
+@dp.message_handler(commands=['dice_switch'], is_admin=True)
+@rate_limit(10, 'privileged_dice_switch_group')
+async def dice_switch_group_admin(message: types.Message):
+    if database.PostSQL(message).get_dice_on(custom_user=message.chat.id):
+        database.PostSQL(message).update_dice_on(message.chat.id, status=False)
+        await message.reply("Теперь в этой группе <b>нельзя</b> использовать dice")
+    else:
+        database.PostSQL(message).update_dice_on(message.chat.id)
+        await message.reply("Теперь в этой группе <b>можно</b> использовать dice")
+
+
 # Если вызвал участник группы, без прав администратора
 @dp.message_handler(commands=['pay'], is_admin=False)
 @rate_limit(30, 'not_privileged_pay_group')
 async def pay_not_group_admin(message: types.Message):
     await message.reply("Чтобы управлять счётом, нужно быть администратором группы.")
+
+
+@dp.message_handler(commands=['dice_switch'], is_admin=False)
+@rate_limit(30, 'not_privileged_dice_switch_group')
+async def dice_switch_not_group_admin(message: types.Message):
+    await message.reply("Чтобы управлять фильтром dice, нужно быть администратором группы.")
 
 
 # Выдача монет от владельца бота

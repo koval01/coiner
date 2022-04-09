@@ -87,6 +87,14 @@ class PostSQL:
         self.finish
         return result["dice_on"]
 
+    def update_dice_on(self, custom_user=0, status=True) -> None:
+        if custom_user: self.user_id = custom_user
+        self.cursor.execute(
+            'update wallet set dice_on = %(status)s where user_id = %(user_id)s',
+            {'user_id': self.user_id, 'status': status},
+        )
+        self.finish
+
     @property
     def get_sum_balance(self) -> int:
         self.cursor.execute(
