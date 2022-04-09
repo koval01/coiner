@@ -93,7 +93,7 @@ def number_to_words(number: int) -> str:
 
 
 def cleaner_name(name: str) -> str:
-    r = re.sub(r"[^A-Za-z0-9А-Яа-яёіїєґ\s]*", "", name)
+    r = re.sub(r"[^A-Za-z0-9А-Яа-яёіїєґЯЁІЇЄҐ\s]*", "", name)
     if len(r) >= 24:
         r = r[:24]
     if len(r) != 0:
