@@ -71,7 +71,7 @@ class PostSQL:
     def get_balance(self, custom_user=0) -> int:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
-            'select balance from wallet where user_id = %(user_id)s limit 1',
+            'select balance from wallet where user_id = %(user_id)s',
             {'user_id': self.user_id},
         )
         result = self.cursor.fetchone()
@@ -81,7 +81,7 @@ class PostSQL:
     def get_dice_on(self, custom_user=0) -> float:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
-            'select dice_on from wallet where user_id = %(user_id)s limit 1',
+            'select dice_on from wallet where user_id = %(user_id)s',
             {'user_id': self.user_id},
         )
         result = self.cursor.fetchone()
