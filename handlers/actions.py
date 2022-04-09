@@ -64,7 +64,7 @@ async def start_for_private(message: types.Message):
 @rate_limit(5, 'start_group')
 async def start_for_group(message: types.Message):
     if database.PostSQL(message).check_user():
-        await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance)
+        await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance())
     else:
         database.PostSQL(message).add_user()
         database.PostSQL(message).modify_balance(config.START_BALANCE)
