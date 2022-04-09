@@ -280,7 +280,7 @@ async def bot_faq(message: types.Message):
 @rate_limit(0.3, 'dice')
 async def dice_(message: types.Message):
     if message.chat.type in ["group", "supergroup"]:
-        if not database.PostSQL(message).get_dice_on(custom_user=message.from_user.id):
+        if not database.PostSQL(message).get_dice_on(custom_user=message.chat.id):
             try:
                 await dp.throttle('dice_disabled', rate=10)
             except Throttled:
