@@ -147,6 +147,8 @@ async def user_inventory(message: types.Message):
             data_user = database.PostSQL().check_user(inv_user_id)
             additional_text_inv = "Вещи <b>%s</b>" % data_user["name"]
         data = database.PostSQL_Inventory(message).get_inventory(inv_user_id)
+        items_price = sum([all_items[el["item_id"]]["price"] for el in data])
+        price_text = "Общая цена <code>%s</code> гривен" % items_price
         items_ = "\n".join(
             ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
              (
@@ -156,8 +158,8 @@ async def user_inventory(message: types.Message):
                  all_items[i["item_id"]]["price"]
              ) for i in data]
         )
-        bot_msg = await message.reply("%s\n\n%s\n%s\nСлотов занято: <b>%d/50</b>" % (
-            items_, "_" * 10, additional_text_inv, len(data)))
+        bot_msg = await message.reply("%s\n\n%s\n%s\n%s\nСлотов занято: <b>%d/50</b>" % (
+            items_, "_" * 10, additional_text_inv, price_text, len(data)))
         await cleaner_body(bot_msg)
     except:
         await message.reply("Что-то пошло не так...")
