@@ -19,5 +19,8 @@ async def cleaner_body(message: Message) -> None:
             database.PostSQL_ChatManager(message).modify_last
             await bot.delete_message(data[0], data[1])
         except Exception as e:
-            database.PostSQL_ChatManager(message).add_new_chat
+            try:
+                database.PostSQL_ChatManager(message).add_new_chat
+            except:
+                pass
             logging.debug(e)
