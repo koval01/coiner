@@ -242,6 +242,8 @@ async def sell_all_items(message: types.Message):
         if x:
             await init_give(message, items_price, item_sell=True)
             bot_msg = await message.reply("Предметы были проданы за <b>%s</b> гривен!" % human_format(items_price))
+        else:
+            bot_msg = await message.reply("Не удалось продать предметы.")
     except Exception as e:
         logging.info(e)
         bot_msg = await message.reply("Произошла ошибка, похоже что у тебя нет предметов.")
@@ -262,6 +264,8 @@ async def pay_group_admin(message: types.Message):
             bot_msg = await message.reply("Получатель: <b>%d</b>\nСумма: <b>%d</b>" % (
                 u_, s_
             ))
+        else:
+            bot_msg = await message.reply("Не удалось продать предметы.")
     except Exception as e:
         logging.debug(e)
         bot_msg = await message.reply("/pay *получатель* *сумма*")
