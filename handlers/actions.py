@@ -145,7 +145,7 @@ async def user_inventory(message: types.Message):
         additional_text_inv = None
         if inv_user_id:
             data_user = database.PostSQL().check_user(inv_user_id)
-            additional_text_inv = "Вещи %s" % data_user["name"]
+            additional_text_inv = "Вещи <b>%s</b>" % data_user["name"]
         data = database.PostSQL_Inventory(message).get_inventory(inv_user_id)
         items_ = "\n".join(
             ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
