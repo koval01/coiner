@@ -1,11 +1,11 @@
 items_ = [
-    {'id': 0, 'name': 'Флаг Украины', 'price': 79999, 'chance_drop': 0.03, 'icon': '🇺🇦'},
-    {'id': 1, 'name': 'Флаг России', 'price': 1, 'chance_drop': 0.8, 'icon': '🇷🇺'},
+    {'id': 0, 'name': 'Флаг Украины', 'price': 19999, 'chance_drop': 0.03, 'icon': '🇺🇦'},
+    {'id': 1, 'name': 'Флаг России', 'price': 1008, 'chance_drop': 0.8, 'icon': '🇷🇺'},
     {'id': 2, 'name': 'Флаг Беларуси', 'price': 9999, 'chance_drop': 0.35, 'icon': '🇧🇾'},
     {'id': 3, 'name': 'Флаг США', 'price': 25000, 'chance_drop': 0.1, 'icon': '🇺🇸'},
     {'id': 4, 'name': 'Флаг Таджикистана', 'price': 800, 'chance_drop': 0.5, 'icon': '🇹🇯'},
     {'id': 5, 'name': 'Флаг Узбекистана', 'price': 400, 'chance_drop': 0.5, 'icon': '🇺🇿'},
-    {'id': 6, 'name': 'Флаг Арабских Эмиратов', 'price': 50000, 'chance_drop': 0.1, 'icon': '🇦🇪'},
+    {'id': 6, 'name': 'Флаг Арабских Эмиратов', 'price': 500000, 'chance_drop': 0.06, 'icon': '🇦🇪'},
     {'id': 7, 'name': 'Флаг Канады', 'price': 200, 'chance_drop': 0.7, 'icon': '🇨🇦'},
     {'id': 8, 'name': 'Флаг Нидерландов', 'price': 9000, 'chance_drop': 0.2, 'icon': '🇳🇱'},
     {'id': 9, 'name': 'Флаг Мексики', 'price': 10, 'chance_drop': 0.99, 'icon': '🇲🇽'},
@@ -45,7 +45,7 @@ items_ = [
     {'id': 39, 'name': 'Вибратор', 'price': 500, 'chance_drop': 0.95, 'icon': '🍆'},
     {'id': 40, 'name': 'Пистолет', 'price': 150000, 'chance_drop': 0.05, 'icon': '🔫'},
     {'id': 41, 'name': 'Песня "Путин молодец"', 'price': 900000, 'chance_drop': 0.02, 'icon': '📀'},
-    {'id': 42, 'name': 'Песня "Я ебу собак"', 'price': 1700000, 'chance_drop': 0.007, 'icon': '📀'},
+    {'id': 42, 'name': 'Песня "Я ебу собак"', 'price': 1800000, 'chance_drop': 0.007, 'icon': '📀'},
     {'id': 43, 'name': 'Пистолет с гравировкой "Алёша"', 'price': 150001, 'chance_drop': 0.05, 'icon': '🔫'},
 
     {'id': 44, 'name': 'Ford Mustang', 'price': 199999, 'chance_drop': 0.04, 'icon': '🚗'},
@@ -67,7 +67,7 @@ items_ = [
     {'id': 60, 'name': 'Audi A8', 'price': 932000, 'chance_drop': 0.03, 'icon': '🚗'},
     {'id': 61, 'name': 'Tesla Model 3', 'price': 1200000, 'chance_drop': 0.009, 'icon': '🚗'},
     {'id': 62, 'name': 'Tesla Model S', 'price': 1890000, 'chance_drop': 0.006, 'icon': '🚗'},
-    {'id': 63, 'name': 'Tesla Model X', 'price': 2876000, 'chance_drop': 0.004, 'icon': '🚗'},
+    {'id': 63, 'name': 'Tesla Model X', 'price': 2876000, 'chance_drop': 0.0007, 'icon': '🚗'},
 
     {'id': 64, 'name': 'Фото Van Darkholme', 'price': 300300, 'chance_drop': 0.04, 'icon': '🖼'},
     {'id': 65, 'name': 'Фото Billy Herrington', 'price': 300300, 'chance_drop': 0.04, 'icon': '🖼'},
@@ -116,10 +116,14 @@ items_ = [
     {'id': 101, 'name': 'Billy Pants', 'price': 300300, 'chance_drop': 0.09, 'icon': '🍓'},
     {'id': 102, 'name': 'Поюзаный гандон', 'price': 5, 'chance_drop': 0.92, 'icon': '🍓'},
 
-    {'id': 103, 'name': 'Флаг ЛГБТ', 'price': 300, 'chance_drop': 0.6, 'icon': '🏳️‍🌈'},
+    {'id': 103, 'name': 'Флаг ЛГБТ', 'price': 1, 'chance_drop': 0.65, 'icon': '🏳️‍🌈'},
     {'id': 104, 'name': 'Bratishkinoff\'s cum', 'price': 50000, 'chance_drop': 0.12, 'icon': '⚪️'},
     {'id': 105, 'name': 'JesusAVGN\'s cum', 'price': 90000, 'chance_drop': 0.08, 'icon': '⚪️'},
     {'id': 106, 'name': 'Труханы Гайки', 'price': 4, 'chance_drop': 0.08, 'icon': '👙'},
 
     {'id': 107, 'name': 'Сперма негра-камикадзе', 'price': 9999999, 'chance_drop': 0.003, 'icon': '⚪️'},
+    {'id': 108, 'name': 'Медаль ЛГБТ-войск', 'price': 40, 'chance_drop': 0.1, 'icon': '🎖'},
+    {'id': 109, 'name': 'Огнедышащий тапок', 'price': 6666, 'chance_drop': 0.03, 'icon': '🔥'},
+    {'id': 110, 'name': 'Лексус Дрейка', 'price': 200, 'chance_drop': 0.2, 'icon': '🚛'},
+    {'id': 111, 'name': 'Кадилак Хесуса', 'price': 36111, 'chance_drop': 0.09, 'icon': '🚙'},
 ]
