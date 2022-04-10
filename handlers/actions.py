@@ -137,18 +137,30 @@ async def user_slaves(message: types.Message):
 @dp.message_handler(commands=['inventory'])
 @rate_limit(5, 'inventory_view')
 async def user_inventory(message: types.Message):
-    data = database.PostSQL_Inventory(message).get_inventory()
-    items_ = "\n".join(
-        ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
-         (
-             i["id"],
-             all_items[i["item_id"]]["icon"],
-             all_items[i["item_id"]]["name"],
-             all_items[i["item_id"]]["price"]
-         ) for i in data]
-    )
-    bot_msg = await message.reply("%s\n\nСлотов занято: <b>%d/50</b>" % (items_, len(data)))
-    await cleaner_body(bot_msg)
+    try:
+        try:
+            inv_user_id = int(message.text.split()[1])
+        except:
+            inv_user_id = message.from_user.id
+        additional_text_inv = None
+        if inv_user_id:
+            data_user = database.PostSQL().check_user(inv_user_id)
+            additional_text_inv = "Вещи %s" % data_user["name"]
+        data = database.PostSQL_Inventory(message).get_inventory(inv_user_id)
+        items_ = "\n".join(
+            ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
+             (
+                 i["id"],
+                 all_items[i["item_id"]]["icon"],
+                 all_items[i["item_id"]]["name"],
+                 all_items[i["item_id"]]["price"]
+             ) for i in data]
+        )
+        bot_msg = await message.reply("%s\n\n%s\nСлотов занято: <b>%d/50</b>" % (
+            items_, additional_text_inv, len(data)))
+        await cleaner_body(bot_msg)
+    except:
+        await message.reply("Что-то пошло не так...")
 
 
 # Продажа предметов
