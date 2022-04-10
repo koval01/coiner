@@ -151,7 +151,7 @@ async def user_inventory(message: types.Message):
             additional_text_inv = "Вещи <b>%s</b>" % data_user["name"]
         data = database.PostSQL_Inventory(message).get_inventory(inv_user_id)
         items_price = sum([all_items[el["item_id"]]["price"] for el in data])
-        price_text = "Общая цена <code>%s</code> гривен" % items_price
+        price_text = "Общая цена <code>%s</code> гривен" % human_format(items_price)
         items_ = "\n".join(
             ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
              (
