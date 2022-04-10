@@ -169,6 +169,32 @@ async def user_inventory(message: types.Message):
     await cleaner_body(bot_msg)
 
 
+@dp.message_handler(commands=['search'])
+@rate_limit(2, 'search_user')
+async def search_user(message: types.Message):
+    try:
+        text = message.text.split()[1]
+        comment = ""
+        if len(text) >= 3 and len(text) <= 25:
+            data = database.PostSQL().search_user(text)
+            top_ = ["<i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
+                    (i["name"], human_format(int(i["balance"])), i["user_id"]) for i in data]
+            if len(top_) == 0:
+                await message.reply("Ничего не найдено.")
+                return
+            if len(top_) > 50:
+                comment = "%s\nПоказано 50 из %d. Попробуй уточнить запрос." % ('_' * 10, len(top_))
+            result = "\n".join(top_)
+            bot_msg = await message.reply("По запросу <code>%s</code> найдено:\n%s\n%s" % (
+                text, result, comment))
+            await cleaner_body(bot_msg)
+        else:
+            await message.reply("Минимальная длина 3 символа, а максимальная 25.")
+    except Exception as e:
+        logging.error("Error search user. Details: %s" % e)
+        await message.reply("Что-то пошло не так...")
+
+
 # Продажа предметов
 @dp.message_handler(commands=['sell'])
 @rate_limit(2, 'sell_item')

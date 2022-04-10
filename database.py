@@ -54,6 +54,18 @@ class PostSQL:
         except Exception as e:
             logging.debug(e)
 
+    def search_user(self, search_text: str) -> list:
+        try:
+            self.cursor.execute(
+                'select * from wallet where lower(name) like lower(%(search_text)s)',
+                {'search_text': f'%{search_text}%'},
+            )
+            result = self.cursor.fetchall()
+            self.finish
+            return result
+        except Exception as e:
+            logging.debug(e)
+
     def add_user(self, custom_user=0) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
