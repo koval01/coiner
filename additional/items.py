@@ -120,4 +120,6 @@ items_ = [
     {'id': 104, 'name': 'Bratishkinoff\'s cum', 'price': 50000, 'chance_drop': 0.12, 'icon': '⚪️'},
     {'id': 105, 'name': 'JesusAVGN\'s cum', 'price': 90000, 'chance_drop': 0.08, 'icon': '⚪️'},
     {'id': 106, 'name': 'Труханы Гайки', 'price': 4, 'chance_drop': 0.08, 'icon': '👙'},
+
+    {'id': 107, 'name': 'Сперма негра-камикадзе', 'price': 9999999, 'chance_drop': 0.003, 'icon': '⚪️'},
 ]
