@@ -192,7 +192,7 @@ async def search_user(message: types.Message):
             await message.reply("Минимальная длина 3 символа, а максимальная 25.")
     except Exception as e:
         logging.error("Error search user. Details: %s" % e)
-        await message.reply("Что-то пошло не так...")
+        await message.reply("Пример - /search elo")
 
 
 # Продажа предметов
