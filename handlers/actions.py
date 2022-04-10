@@ -64,14 +64,15 @@ async def start_for_private(message: types.Message):
 @rate_limit(5, 'start_group')
 async def start_for_group(message: types.Message):
     if database.PostSQL(message).check_user():
-        await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance())
+        bot_msg = await message.reply("Баланс этой группы: %d гривен" % database.PostSQL(message).get_balance())
     else:
         database.PostSQL(message).add_user()
         database.PostSQL(message).modify_balance(config.START_BALANCE)
-        await message.reply(
+        bot_msg = await message.reply(
             "Счёт группы успешно создан. Также на баланс группы было начислено <b>%d</b> гривен!" %
             config.START_BALANCE
         )
+    await cleaner_body(bot_msg)
 
 
 # Проверка баланса, работает без всяких ограничений
@@ -79,8 +80,9 @@ async def start_for_group(message: types.Message):
 @rate_limit(1, 'wallet_private')
 async def wallet_private(message: types.Message):
     data = database.PostSQL(message).check_user()
-    await message.reply(
+    bot_msg = await message.reply(
         "Твой баланс: %d гривен\nНомер счёта: «<code>%d</code>»" % (data["balance"], data["user_id"]))
+    await cleaner_body(bot_msg)
 
 
 # И команда для групп конечно
@@ -100,16 +102,17 @@ async def pay_in_private(message: types.Message):
     try:
         u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
         if u_ == message.chat.id:
-            await message.reply("Какое-то странное действие.")
+            bot_msg = await message.reply("Какое-то странное действие.")
             return
         x = await init_pay(message, s_, u_)
         if x:
-            await message.reply("Получатель: <b>%d</b>\nСумма: <b>%d</b>" % (
+            bot_msg = await message.reply("Получатель: <b>%d</b>\nСумма: <b>%d</b>" % (
                 u_, s_
             ))
     except Exception as e:
         logging.debug(e)
-        await message.reply("/pay *получатель* *сумма*")
+        bot_msg = await message.reply("/pay *получатель* *сумма*")
+    await cleaner_body(bot_msg)
 
 
 @dp.message_handler(commands=['buyslave'])
@@ -118,7 +121,8 @@ async def buy_slave_private(message: types.Message):
     try:
         x = await slave_buy_(message)
         if x:
-            await message.reply("Ты успешно купил нового раба >:)")
+            bot_msg = await message.reply("Ты успешно купил нового раба >:)")
+            await cleaner_body(bot_msg)
     except Exception as e:
         logging.debug(e)
 
@@ -128,9 +132,10 @@ async def buy_slave_private(message: types.Message):
 async def user_slaves(message: types.Message):
     data = int(database.PostSQL(message).get_slaves(
         custom_user=message.from_user.id))
-    await message.reply("У тебя <b>%d</b> рабов\nДоход с них <b>%d</b> гривен в час" % (
+    bot_msg = await message.reply("У тебя <b>%d</b> рабов\nДоход с них <b>%d</b> гривен в час" % (
         data, data * config.PAY_PER_SLAVE
     ))
+    await cleaner_body(bot_msg)
 
 
 # Можно даже глянуть свой инвентарь
@@ -144,7 +149,7 @@ async def user_inventory(message: types.Message):
             inv_user_id = message.from_user.id
         additional_text_inv = None
         if inv_user_id <= 0:
-            await message.reply("Возможно неверный идентификатор.")
+            bot_msg = await message.reply("Возможно неверный идентификатор.")
             return
         if inv_user_id:
             data_user = database.PostSQL().check_user(inv_user_id)
@@ -165,7 +170,7 @@ async def user_inventory(message: types.Message):
             items_, "_" * 10, additional_text_inv, price_text, len(data)))
     except Exception as e:
         logging.debug("Error in inventory function: %s" % e)
-        await message.reply("Что-то пошло не так...")
+        bot_msg = await message.reply("Что-то пошло не так...")
     await cleaner_body(bot_msg)
 
 
@@ -180,19 +185,19 @@ async def search_user(message: types.Message):
             top_ = ["<i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
                     (i["name"], human_format(int(i["balance"])), i["user_id"]) for i in data]
             if len(top_) == 0:
-                await message.reply("Ничего не найдено.")
+                bot_msg = await message.reply("Ничего не найдено.")
                 return
             if len(top_) > 50:
                 comment = "%s\nПоказано 50 из %d. Попробуй уточнить запрос." % ('_' * 10, len(top_))
             result = "\n".join(top_)
             bot_msg = await message.reply("По запросу <code>%s</code> найдено:\n%s\n%s" % (
                 text, result, comment))
-            await cleaner_body(bot_msg)
         else:
-            await message.reply("Минимальная длина 3 символа, а максимальная 25.")
+            bot_msg = await message.reply("Минимальная длина 3 символа, а максимальная 25.")
     except Exception as e:
         logging.error("Error search user. Details: %s" % e)
-        await message.reply("Пример - /search elo")
+        bot_msg = await message.reply("Пример - /search elo")
+    await cleaner_body(bot_msg)
 
 
 # Продажа предметов
@@ -203,9 +208,9 @@ async def sell__(message: types.Message):
         item_id = int(message.text.split()[1])
         data_ = database.PostSQL_Inventory(message).get_item(item_id)
         if int(data_["owner_id"]) != message.from_user.id:
-            await message.reply("Мне кажется или этот предмет не твой"
-                                "\nТы меня обмануть решил что ли? Гадёныш, "
-                                "иди делом лучше займись!")
+            bot_msg = await message.reply("Мне кажется или этот предмет не твой"
+                                          "\nТы меня обмануть решил что ли? Гадёныш, "
+                                          "иди делом лучше займись!")
             return
 
         x = await take_item(message, item_id)
@@ -213,16 +218,17 @@ async def sell__(message: types.Message):
         item_price = item__["price"]
         if x:
             await init_give(message, item_price, item_sell=True)
-            await message.reply("Предмет %s <b>%s</b> был продан за <b>%d</b> гривен!" % (
+            bot_msg = await message.reply("Предмет %s <b>%s</b> был продан за <b>%d</b> гривен!" % (
                 item__["icon"], item__["name"], item_price
             ))
     except Exception as e:
         logging.info(e)
-        await message.reply(
+        bot_msg = await message.reply(
             "/sell *ID предмета*"
             "\n\nПример: (*ID предмета*) 🇺🇸 "
             "Флаг США (15000 гривен)"
         )
+    await cleaner_body(bot_msg)
 
 
 # Продажа всего инвентаря сразу
@@ -235,10 +241,11 @@ async def sell_all_items(message: types.Message):
         x = await take_all_items(message)
         if x:
             await init_give(message, items_price, item_sell=True)
-            await message.reply("Предметы были проданы за <b>%s</b> гривен!" % human_format(items_price))
+            bot_msg = await message.reply("Предметы были проданы за <b>%s</b> гривен!" % human_format(items_price))
     except Exception as e:
         logging.info(e)
-        await message.reply("Произошла ошибка, похоже что у тебя нет предметов.")
+        bot_msg = await message.reply("Произошла ошибка, похоже что у тебя нет предметов.")
+    await cleaner_body(bot_msg)
 
 
 # Если вызвал админ из группы
@@ -248,16 +255,17 @@ async def pay_group_admin(message: types.Message):
     try:
         u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
         if u_ == message.chat.id:
-            await message.reply("Какое-то странное действие.")
+            bot_msg = await message.reply("Какое-то странное действие.")
             return
         x = await init_pay(message, s_, u_)
         if x:
-            await message.reply("Получатель: <b>%d</b>\nСумма: <b>%d</b>" % (
+            bot_msg = await message.reply("Получатель: <b>%d</b>\nСумма: <b>%d</b>" % (
                 u_, s_
             ))
     except Exception as e:
         logging.debug(e)
-        await message.reply("/pay *получатель* *сумма*")
+        bot_msg = await message.reply("/pay *получатель* *сумма*")
+    await cleaner_body(bot_msg)
 
 
 @dp.message_handler(commands=['dice_switch'], is_admin=True)
@@ -265,23 +273,26 @@ async def pay_group_admin(message: types.Message):
 async def dice_switch_group_admin(message: types.Message):
     if database.PostSQL(message).get_dice_on(custom_user=message.chat.id):
         database.PostSQL(message).update_dice_on(message.chat.id, status=False)
-        await message.reply("Теперь в этой группе <b>нельзя</b> использовать dice")
+        bot_msg = await message.reply("Теперь в этой группе <b>нельзя</b> использовать dice")
     else:
         database.PostSQL(message).update_dice_on(message.chat.id, status=True)
-        await message.reply("Теперь в этой группе <b>можно</b> использовать dice")
+        bot_msg = await message.reply("Теперь в этой группе <b>можно</b> использовать dice")
+    await cleaner_body(bot_msg)
 
 
 # Если вызвал участник группы, без прав администратора
 @dp.message_handler(commands=['pay'], is_admin=False)
 @rate_limit(30, 'not_privileged_pay_group')
 async def pay_not_group_admin(message: types.Message):
-    await message.reply("Чтобы управлять счётом, нужно быть администратором группы.")
+    bot_msg = await message.reply("Чтобы управлять счётом, нужно быть администратором группы.")
+    await cleaner_body(bot_msg)
 
 
 @dp.message_handler(commands=['dice_switch'], is_admin=False)
 @rate_limit(30, 'not_privileged_dice_switch_group')
 async def dice_switch_not_group_admin(message: types.Message):
-    await message.reply("Чтобы управлять фильтром dice, нужно быть администратором группы.")
+    bot_msg = await message.reply("Чтобы управлять фильтром dice, нужно быть администратором группы.")
+    await cleaner_body(bot_msg)
 
 
 # Выдача монет от владельца бота
@@ -293,19 +304,21 @@ async def give_money(message: types.Message):
         data = database.PostSQL(message).check_user(custom_user=u_)
         x = await init_give(message, s_, u_, "Администрация")
         if x:
-            await message.reply("Для <b>%s</b> было выдано <b>%d</b> гривен!" % (
+            bot_msg = await message.reply("Для <b>%s</b> было выдано <b>%d</b> гривен!" % (
                 data["name"], s_
             ))
     except Exception as e:
         logging.debug(e)
-        await message.reply("/give *получатель* *сумма*")
+        bot_msg = await message.reply("/give *получатель* *сумма*")
+    await cleaner_body(bot_msg)
 
 
 # Если у пользователя нет прав на эту команду
 @dp.message_handler(commands=['give'], is_owner=False)
 @rate_limit(10, 'give_coins_forbidden')
 async def give_money_no_access(message: types.Message):
-    await message.reply("Недоступно!")
+    bot_msg = await message.reply("Недоступно!")
+    await cleaner_body(bot_msg)
 
 
 # Проверка на пидораса
@@ -326,14 +339,16 @@ async def fagot_check_private(message: types.Message):
 @dp.message_handler(commands=['info'])
 @rate_limit(30, 'info')
 async def bot_info(message: types.Message):
-    await message.reply(config.BOT_INFO)
+    bot_msg = await message.reply(config.BOT_INFO)
+    await cleaner_body(bot_msg)
 
 
 # Ну и подсказки по боту
 @dp.message_handler(commands=['faq'])
 @rate_limit(30, 'faq')
 async def bot_faq(message: types.Message):
-    await message.reply(config.BOT_FAQ)
+    bot_msg = await message.reply(config.BOT_FAQ)
+    await cleaner_body(bot_msg)
 
 
 # Испытаем удачу
@@ -347,7 +362,7 @@ async def dice_(message: types.Message):
             except Throttled:
                 pass
             else:
-                await message.reply("Администрация этой группы отключила команду dice")
+                bot_msg = await message.reply("Администрация этой группы отключила команду dice")
             return
     if uniform(0, 1) >= 0.4:
         if uniform(0, 1) > 0.3:
@@ -398,13 +413,14 @@ async def group_echo(message: types.Message):
             database.PostSQL(message).modify_balance(
                 value_for_user, custom_user=message.from_user.id,
             )
-            await message.answer(
+            bot_msg = await message.answer(
                 "За активность в этой группе на баланс группы было зачисленно - <b>%d</b> гривен"
                 "\nТакже случайному участнику <b>%s</b> - <b>%d</b> гривен" %
                 (value_, message.from_user.full_name, value_for_user)
             )
         except Exception as e:
             logging.error(e)
-            await message.answer(
+            bot_msg = await message.answer(
                 "За активность в этой группе на баланс группы было зачисленно - <b>%d</b> гривен" % value_
             )
+        await cleaner_body(bot_msg)
