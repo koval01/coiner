@@ -5,6 +5,7 @@ from aiogram.types.message import Message
 
 import database
 from additional.items import items_ as all_items
+from handlers.cleaner import cleaner_body
 
 
 async def give_item(message: Message, item_id: int) -> bool:
@@ -42,10 +43,12 @@ async def take_item(message: Message, item_id: int) -> bool:
             database.PostSQL_Inventory(message).take_item(item_id)
             return True
         except Exception as e:
-            await message.reply("Не удалось отобрать предмет через <b>ошибку базы данных</b>!")
+            bot_msg = await message.reply("Не удалось отобрать предмет через <b>ошибку базы данных</b>!")
+            await cleaner_body(bot_msg)
             logging.error(e)
     else:
-        await message.reply("Произошла ошибка! У тебя нет предметов.")
+        bot_msg = await message.reply("Произошла ошибка! У тебя нет предметов.")
+        await cleaner_body(bot_msg)
         return False
 
 
