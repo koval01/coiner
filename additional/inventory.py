@@ -45,7 +45,7 @@ async def take_item(message: Message, item_id: int) -> bool:
             await message.reply("Не удалось отобрать предмет через <b>ошибку базы данных</b>!")
             logging.error(e)
     else:
-        await message.reply("Произошла ошибка!")
+        await message.reply("Произошла ошибка! У тебя нет предметов.")
         return False
 
 
@@ -63,7 +63,7 @@ async def take_all_items(message: Message) -> bool:
             await message.reply("Не удалось отобрать предметы через <b>ошибку базы данных</b>!")
             logging.error(e)
     else:
-        await message.reply("Произошла ошибка!")
+        await message.reply("Произошла ошибка! У тебя нет предметов.")
         return False
 
 
