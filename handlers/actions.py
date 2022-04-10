@@ -163,8 +163,12 @@ async def user_inventory(message: types.Message):
         )
         bot_msg = await message.reply("%s\n\n%s\n%s\n%s\nСлотов занято: <b>%d/50</b>" % (
             items_, "_" * 10, additional_text_inv, price_text, len(data)))
-        await cleaner_body(bot_msg)
-    except:
+        try:
+            await cleaner_body(bot_msg)
+        except:
+            pass
+    except Exception as e:
+        logging.debug("Error in inventory function: %s" % e)
         await message.reply("Что-то пошло не так...")
 
 

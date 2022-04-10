@@ -20,4 +20,4 @@ async def cleaner_body(message: Message) -> None:
             await bot.delete_message(data[0], data[1])
         except Exception as e:
             database.PostSQL_ChatManager(message).add_new_chat
-            logging.error(e)
+            logging.debug(e)
