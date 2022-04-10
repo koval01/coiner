@@ -12,8 +12,8 @@ START_BALANCE = 300
 SLAVE_PRICE_PRC = 30
 SLAVE_PRICE = 2700
 PAY_PER_SLAVE = 290
-COM_TRANS = 6  # 4 процента комиссии
-CLEANER = False
+COM_TRANS = 6
+CLEANER = True
 
 BOT_INFO = """
 Этот бот был написан за один день, и не очень сложным. Цель этого бота - развлекать участников групп. 
