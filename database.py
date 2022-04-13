@@ -175,7 +175,7 @@ class PostSQL:
 
 
 class PostSQL_ChatManager:
-    def __init__(self, msg: Message) -> None:
+    def __init__(self, msg: Message, msg_user: Message = None) -> None:
         self.conn = psycopg2.connect(
             dbname=DB_NAME, user=DB_USER,
             password=DB_PASS, host=DB_HOST
@@ -189,6 +189,11 @@ class PostSQL_ChatManager:
         elif msg.chat.type == "private":
             return
 
+        if msg_user:
+            self.message_id_from_user = msg_user.message_id
+        else:
+            self.message_id_from_user = 0
+
     @property
     def finish(self) -> None:
         self.cursor.close()
@@ -197,7 +202,7 @@ class PostSQL_ChatManager:
     @property
     def get_last_message(self) -> list:
         self.cursor.execute(
-            'select chat_id, last_message_id from chat where chat_id = %(chat_id)s limit 1',
+            'select chat_id, last_message_id, last_user_message_id from chat where chat_id = %(chat_id)s limit 1',
             {'chat_id': self.chat_id}
         )
         result = self.cursor.fetchall()
@@ -207,10 +212,12 @@ class PostSQL_ChatManager:
     @property
     def add_new_chat(self) -> None:
         self.cursor.execute(
-            'insert into chat(chat_id, last_message_id) values (%(chat)s, %(last)s);',
+            'insert into chat(chat_id, last_message_id, last_user_message_id) '
+            'values (%(chat)s, %(last)s, %(user_last)s)',
             {
                 'chat': self.chat_id,
                 'last': self.message_id,
+                'user_last': self.message_id_from_user
             }
         )
         self.conn.commit()
@@ -219,10 +226,11 @@ class PostSQL_ChatManager:
     @property
     def modify_last(self) -> None:
         self.cursor.execute(
-            'update chat set last_message_id = %(last)s where chat_id = %(chat)s',
+            'update chat set last_message_id = %(last)s, last_user_message_id = %(last_usr)s where chat_id = %(chat)s',
             {
                 'chat': self.chat_id,
                 'last': self.message_id,
+                'last_usr': self.message_id_from_user
             },
         )
         self.conn.commit()
