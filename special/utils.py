@@ -61,7 +61,7 @@ def human_format(num: int) -> str:
         magnitude += 1
         num /= 1000.0
 
-    return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
+    return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T', 'Q'][magnitude])
 
 
 def number_to_words(number: int) -> str:

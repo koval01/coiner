@@ -29,7 +29,7 @@ async def cleaner_body(message: Message, message_user: Message = None) -> None:
                 database.PostSQL_ChatManager(message, message_user).add_new_chat
             except:
                 pass
-            logging.debug(e)
+            logging.debug("Body cleaner error. Details: %s" % e)
 
 
 async def cleaner_slaves_notify(message: Message) -> None:
