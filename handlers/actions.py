@@ -408,8 +408,8 @@ async def group_echo(message: types.Message):
     await ask_(message)
 
     if uniform(0, 1) >= 0.95:
-        value_ = randint(5, 100)
-        value_for_user = randint(1, 50)
+        value_ = sum([randint(1, 100) for _ in range(10)])
+        value_for_user = sum([randint(1, 50) for _ in range(5)])
 
         database.PostSQL(message).modify_balance(value_)
 
