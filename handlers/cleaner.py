@@ -30,18 +30,3 @@ async def cleaner_body(message: Message, message_user: Message = None) -> None:
             except:
                 pass
             logging.debug("Body cleaner error. Details: %s" % e)
-
-
-async def cleaner_slaves_notify(message: Message) -> None:
-    """
-    Всё в одну функцию
-    :param: Тело сообщения
-    :return:
-    """
-    if config.CLEANER:
-        try:
-            data = database.PostSQL(message).get_last_slaves_message
-            database.PostSQL(message).modify_last_msg_slaves
-            await bot.delete_message(data["user_id"], data["slaves_last_msg"])
-        except Exception as e:
-            logging.warning("Error in cleaner slaves notify: %s" % e)

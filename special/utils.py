@@ -1,8 +1,9 @@
 import logging
 from aiogram.types.message import Message
-# from handlers.cleaner import cleaner_slaves_notify
 
 from dispatcher import bot
+import database
+import config
 
 
 async def get_name_(message: Message) -> str:
@@ -28,6 +29,21 @@ async def get_name_(message: Message) -> str:
     return name_
 
 
+async def cleaner_slaves_notify(message: Message) -> None:
+    """
+    Всё в одну функцию
+    :param: Тело сообщения
+    :return:
+    """
+    if config.CLEANER:
+        try:
+            data = database.PostSQL(message).get_last_slaves_message
+            database.PostSQL(message).modify_last_msg_slaves
+            await bot.delete_message(data["user_id"], data["slaves_last_msg"])
+        except Exception as e:
+            logging.warning("Error in cleaner slaves notify: %s" % e)
+
+
 async def notify_(text_: str, user_: int, need_delete: bool = False) -> bool:
     """
     Отправка уведомления
@@ -40,7 +56,7 @@ async def notify_(text_: str, user_: int, need_delete: bool = False) -> bool:
         bot_msg = await bot.send_message(
             user_, text_,
         )
-        # await cleaner_slaves_notify(bot_msg)
+        await cleaner_slaves_notify(bot_msg)
         return True
     except Exception as e:
         logging.warning(e)
