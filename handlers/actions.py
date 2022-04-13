@@ -427,4 +427,4 @@ async def group_echo(message: types.Message):
             bot_msg = await message.answer(
                 "За активность в этой группе на баланс группы было зачисленно - <b>%d</b> гривен" % value_
             )
-        await cleaner_body(bot_msg, message)
+        await cleaner_body(bot_msg)
