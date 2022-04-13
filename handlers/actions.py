@@ -103,6 +103,7 @@ async def pay_in_private(message: types.Message):
         u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
         if u_ == message.chat.id:
             bot_msg = await message.reply("Какое-то странное действие.")
+            await cleaner_body(bot_msg, message)
             return
         x = await init_pay(message, s_, u_)
         if x:
@@ -150,6 +151,7 @@ async def user_inventory(message: types.Message):
         additional_text_inv = None
         if inv_user_id <= 0:
             bot_msg = await message.reply("Возможно неверный идентификатор.")
+            await cleaner_body(bot_msg, message)
             return
         if inv_user_id:
             data_user = database.PostSQL().check_user(inv_user_id)
@@ -186,6 +188,7 @@ async def search_user(message: types.Message):
                     (i["name"], human_format(int(i["balance"])), i["user_id"]) for i in data]
             if len(top_) == 0:
                 bot_msg = await message.reply("Ничего не найдено.")
+                await cleaner_body(bot_msg, message)
                 return
             if len(top_) > 50:
                 comment = "%s\nПоказано 50 из %d. Попробуй уточнить запрос." % ('_' * 10, len(top_))
@@ -211,6 +214,7 @@ async def sell__(message: types.Message):
             bot_msg = await message.reply("Мне кажется или этот предмет не твой"
                                           "\nТы меня обмануть решил что ли? Гадёныш, "
                                           "иди делом лучше займись!")
+            await cleaner_body(bot_msg, message)
             return
 
         x = await take_item(message, item_id)
@@ -258,6 +262,7 @@ async def pay_group_admin(message: types.Message):
         u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
         if u_ == message.chat.id:
             bot_msg = await message.reply("Какое-то странное действие.")
+            await cleaner_body(bot_msg, message)
             return
         x = await init_pay(message, s_, u_)
         if x:
@@ -367,6 +372,7 @@ async def dice_(message: types.Message):
                 pass
             else:
                 bot_msg = await message.reply("Администрация этой группы отключила команду dice")
+                await cleaner_body(bot_msg, message)
             return
     if uniform(0, 1) >= 0.4:
         if uniform(0, 1) > 0.3:
