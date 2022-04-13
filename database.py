@@ -25,6 +25,7 @@ class PostSQL:
 
         try:
             #  Если нету msg, то просто скипаем этот блок
+            self.message_id = msg.message_id
             if msg.chat.type in ["group", "supergroup"] and not set_private:
                 self.user_id = msg.chat.id
                 self.name = msg.chat.title
@@ -53,6 +54,18 @@ class PostSQL:
             return result[0]
         except Exception as e:
             logging.debug(e)
+
+    @property
+    def modify_last_msg_slaves(self) -> None:
+        self.cursor.execute(
+            'update wallet set slaves_last_msg = %(last)s where user_id = %(chat)s',
+            {
+                'chat': self.user_id,
+                'last': self.message_id
+            },
+        )
+        self.conn.commit()
+        self.finish
 
     def search_user(self, search_text: str) -> list:
         try:
@@ -89,6 +102,16 @@ class PostSQL:
         result = self.cursor.fetchone()
         self.finish
         return result["balance"]
+
+    @property
+    def get_last_slaves_message(self) -> int:
+        self.cursor.execute(
+            'select slaves_last_msg from wallet where user_id = %(user_id)s',
+            {'user_id': self.user_id},
+        )
+        result = self.cursor.fetchone()
+        self.finish
+        return result["slaves_last_msg"]
 
     def get_dice_on(self, custom_user=0) -> float:
         if custom_user: self.user_id = custom_user

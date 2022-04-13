@@ -8,7 +8,7 @@ from special.utils import get_name_, notify_
 from handlers.cleaner import cleaner_body
 
 
-async def init_pay(message: Message, sum_: int, user_: int) -> None:
+async def init_pay(message: Message, sum_: int, user_: int, slaves_mode: bool = False) -> None:
     """
     Функция для передачи гривен
     :param message: Тело сообщения
@@ -60,7 +60,7 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
         # Уведомим получателя
         await notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>, комиссия <b>%d%%</b>" % (
             com_result, name_, config.COM_TRANS
-        ), user_)
+        ), user_, need_delete=slaves_mode)
 
     except Exception as e:
         bot_msg = await message.reply("Что-то пошло не так, проверьте правильно лы всё ввели"

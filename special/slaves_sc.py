@@ -15,7 +15,7 @@ async def slaves_() -> None:
         add_ = data * config.PAY_PER_SLAVE
         await init_give(
             None, sum_=add_, custom_name="рабы",
-            user_=i["user_id"],
+            user_=i["user_id"], slaves_mode=True
         )
 
 

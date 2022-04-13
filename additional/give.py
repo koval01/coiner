@@ -8,7 +8,8 @@ from special.utils import get_name_, notify_
 async def init_give(message: Message = None,
                     sum_: int = 0, user_: int = 0,
                     custom_name: str = None,
-                    item_sell: bool = False) -> None:
+                    item_sell: bool = False,
+                    slaves_mode: bool = False) -> None:
     """
     Функция для выдачи гривен
     :param message: Тело сообщения
@@ -38,6 +39,6 @@ async def init_give(message: Message = None,
     if not item_sell:
         await notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>" % (
             sum_, name_
-        ), user_)
+        ), user_, need_delete=slaves_mode)
 
     return True

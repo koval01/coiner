@@ -27,15 +27,16 @@ async def get_name_(message: Message) -> str:
     return name_
 
 
-async def notify_(text_: str, user_: int) -> bool:
+async def notify_(text_: str, user_: int, need_delete: bool = False) -> bool:
     """
     Отправка уведомления
     :param text_: Текст
     :param user_: ID юзера
     :return: Результат отправки, успешно или нет
     """
+    if need_delete: pass
     try:
-        await bot.send_message(
+        bot_msg = await bot.send_message(
             user_, text_,
         )
         return True
