@@ -5,6 +5,7 @@ from aiogram.types.message import Message
 import config
 import database
 from special.utils import get_name_, notify_
+from handlers.cleaner import cleaner_body
 
 
 async def init_pay(message: Message, sum_: int, user_: int) -> None:
@@ -19,15 +20,18 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
 
     try:
         if not database.PostSQL(message).check_user(custom_user=user_):
-            await message.reply("Ошибка, не удалось найти получателя.")
+            bot_msg = await message.reply("Ошибка, не удалось найти получателя.")
+            await cleaner_body(bot_msg, message)
             return
 
         if int(database.PostSQL(message).check_user()[2]) < sum_:
-            await message.reply("Недостаточно гривен!")
+            bot_msg = await message.reply("Недостаточно гривен!")
+            await cleaner_body(bot_msg, message)
             return
 
         if sum_ < 100:
-            await message.reply("Минимум 100 гривен!")
+            bot_msg = await message.reply("Минимум 100 гривен!")
+            await cleaner_body(bot_msg, message)
             return
 
         # Сначала пробуем снять монеты со счёта отправителя
@@ -59,9 +63,10 @@ async def init_pay(message: Message, sum_: int, user_: int) -> None:
         ), user_)
 
     except Exception as e:
-        await message.reply("Что-то пошло не так, проверьте правильно лы всё ввели"
-                            " и убедитесь - существует ли получатель.")
+        bot_msg = await message.reply("Что-то пошло не так, проверьте правильно лы всё ввели"
+                                      " и убедитесь - существует ли получатель.")
         logging.warning(e)
+        await cleaner_body(bot_msg, message)
         return
 
     return True

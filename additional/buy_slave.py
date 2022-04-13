@@ -1,6 +1,7 @@
 import logging
 
 from aiogram.types.message import Message
+from handlers.cleaner import cleaner_body
 
 import config
 import database
@@ -20,7 +21,8 @@ async def init_transaction_(message: Message) -> None:
 
     try:
         if int(database.PostSQL(message, set_private=True).check_user()[2]) < slave_price:
-            await message.reply("Недостаточно гривен! Новый раб стоит <b>%d</b> гривен!" % slave_price)
+            bot_msg = await message.reply("Недостаточно гривен! Новый раб стоит <b>%d</b> гривен!" % slave_price)
+            await cleaner_body(bot_msg, message)
             return
 
         # Сначала пробуем снять монеты со счёта покупателя
@@ -40,8 +42,9 @@ async def init_transaction_(message: Message) -> None:
             return
 
     except Exception as e:
-        await message.reply("Что-то пошло не так")
+        bot_msg = await message.reply("Что-то пошло не так")
         logging.warning(e)
+        await cleaner_body(bot_msg, message)
         return
 
     return True

@@ -6,6 +6,7 @@ from aiogram.types.message import Message
 import config
 from additional.inventory import give_item
 from additional.items import items_ as all_items
+from handlers.cleaner import cleaner_body
 
 
 async def ask_(message: Message) -> None:
@@ -17,11 +18,12 @@ async def ask_(message: Message) -> None:
     try:
         if message.text[-1:] == message.text[:1] == "?" and len(message.text) >= 5:
             r_ = choice(["отрицательного", "утвердительного"])
-            await message.reply(
+            bot_msg = await message.reply(
                 "<i>Шанс </i><b>%s</b><i> ответа на </i>«<b>%s</b>»<i>, примерно </i><b>%f%%</b>" % (
                     r_, message.text[1:], uniform(0, 100)
                 )
             )
+            await cleaner_body(bot_msg, message)
     except Exception as e:
         logging.warning(e)
 
@@ -37,7 +39,7 @@ async def fagot_(message: Message) -> None:
         value_ = float(0)
 
     try:
-        await message.reply(
+        bot_msg = await message.reply(
             "<i>Шанс что ты пидор примерно </i><b>%f%%</b>" % (
                 value_,
             )
@@ -52,6 +54,6 @@ async def fagot_(message: Message) -> None:
                 ))
             except Exception as e:
                 logging.warning(e)
-
+        await cleaner_body(bot_msg, message)
     except Exception as e:
         logging.warning(e)
