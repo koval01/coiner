@@ -44,4 +44,4 @@ async def cleaner_slaves_notify(message: Message) -> None:
             database.PostSQL(message).modify_last_msg_slaves
             await bot.delete_message(data["user_id"], data["slaves_last_msg"])
         except Exception as e:
-            print(e)
+            logging.warning("Error in cleaner slaves notify: %s" % e)

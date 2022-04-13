@@ -20,7 +20,7 @@ async def slaves_() -> None:
 
 
 async def scheduler():
-    await slaves_()
+    # await slaves_()
     schedule.every().hour.do(slaves_)
 
     while True:

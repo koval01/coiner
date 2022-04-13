@@ -1,5 +1,6 @@
 import logging
 from aiogram.types.message import Message
+from handlers.cleaner import cleaner_slaves_notify
 
 from dispatcher import bot
 
@@ -39,6 +40,7 @@ async def notify_(text_: str, user_: int, need_delete: bool = False) -> bool:
         bot_msg = await bot.send_message(
             user_, text_,
         )
+        await cleaner_slaves_notify(bot_msg)
         return True
     except Exception as e:
         logging.warning(e)
