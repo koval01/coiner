@@ -282,7 +282,7 @@ class PostSQL_Inventory:
     def get_inventory(self, custom_user=0) -> int:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
-            'select item_id, id from inventory where owner_id = %(user_id)s',
+            'select item_id, id from inventory order by id desc where owner_id = %(user_id)s',
             {'user_id': self.user_id},
         )
         result = self.cursor.fetchall()
