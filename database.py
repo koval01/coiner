@@ -114,6 +114,16 @@ class PostSQL:
         return result["balance"]
 
     @property
+    def get_inv_sort_mode(self) -> int:
+        self.cursor.execute(
+            'select inv_sort_mode from wallet where user_id = %(user_id)s',
+            {'user_id': self.user_id},
+        )
+        result = self.cursor.fetchone()
+        self.finish
+        return result["inv_sort_mode"]
+
+    @property
     def get_last_slaves_message(self) -> int:
         self.cursor.execute(
             'select slaves_last_msg from wallet where user_id = %(user_id)s',

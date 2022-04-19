@@ -157,17 +157,19 @@ async def user_inventory(message: types.Message):
             data_user = database.PostSQL().check_user(inv_user_id)
             additional_text_inv = "Вещи <b>%s</b>" % data_user["name"]
         data = database.PostSQL_Inventory(message).get_inventory(inv_user_id)
+        sort_mode = database.PostSQL(message).get_inv_sort_mode
         items_price = sum([all_items[el["item_id"]]["price"] for el in data])
         price_text = "Общая цена <code>%s</code> гривен" % human_format(items_price)
-        items_ = "\n".join(
-            ["(<b>%d</b>) %s <b>%s</b> (<b>%d</b> гривен)" %
-             (
-                 i["id"],
-                 all_items[i["item_id"]]["icon"],
-                 all_items[i["item_id"]]["name"],
-                 all_items[i["item_id"]]["price"]
-             ) for i in data]
-        )
+        formatted_list = [{
+            "id": i["id"], "icon": all_items[i["item_id"]]["icon"],
+            "name": all_items[i["item_id"]]["name"], "price": all_items[i["item_id"]]["price"]
+        } for i in data]
+        if sort_mode:
+            formatted_list = sorted(formatted_list, key=lambda y: y['name'])
+        items_ = "\n".join([
+            f"(<b>{i['id']}</b>) {i['icon']} <b>{i['name']}</b> (<b>{i['price']}</b> гривен)"
+            for i in formatted_list
+        ])
         bot_msg = await message.reply("%s\n\n%s\n%s\n%s\nСлотов занято: <b>%d/50</b>" % (
             items_, "_" * 10, additional_text_inv, price_text, len(data)))
     except Exception as e:
