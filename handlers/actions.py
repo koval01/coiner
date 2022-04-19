@@ -382,7 +382,7 @@ async def bot_faq(message: types.Message):
 
 # Испытаем удачу
 @dp.message_handler(commands=['dice'])
-@rate_limit(0.3, 'dice')
+@rate_limit(0.15, 'dice')
 async def dice_(message: types.Message):
     if message.chat.type in ["group", "supergroup"]:
         if not database.PostSQL(message).get_dice_on(custom_user=message.chat.id):
