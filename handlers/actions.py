@@ -165,7 +165,7 @@ async def user_inventory(message: types.Message):
             "name": all_items[i["item_id"]]["name"], "price": all_items[i["item_id"]]["price"]
         } for i in data]
         if sort_mode:
-            formatted_list = sorted(formatted_list, key=lambda y: y['name'])
+            formatted_list = sorted(formatted_list[:], key=lambda y: y['name'])
         items_ = "\n".join([
             f"(<b>{i['id']}</b>) {i['icon']} <b>{i['name']}</b> (<b>{i['price']}</b> гривен)"
             for i in formatted_list
