@@ -1,12 +1,14 @@
 import os
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
-BOT_OWNER = os.environ.get("BOT_OWNER", None)
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_OWNER = os.getenv("BOT_OWNER")
 
-DB_HOST = os.environ.get("DB_HOST", None)
-DB_NAME = os.environ.get("DB_NAME", None)
-DB_USER = os.environ.get("DB_USER", None)
-DB_PASS = os.environ.get("DB_PASS", None)
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 START_BALANCE = 5000
 START_XP = 0

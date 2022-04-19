@@ -1,19 +1,29 @@
 import logging
+import re
 
 import psycopg2
 import psycopg2.extras
 from aiogram.types.message import Message
 from special.utils import cleaner_name
 
-from config import DB_HOST, DB_NAME, DB_PASS, DB_USER
+from config import DATABASE_URL
+
+
+class PostgreSQL_Paser(object):
+    def __init__(self) -> None:
+        self.pattern = re.compile(
+            r"postgres://(?P<user>[0-9A-Za-z]*):(?P<password>[0-9A-Za-z]*)"
+            r"@(?P<host>[0-9A-Za-z-.]*):(?P<port>[0-9]{4})/(?P<dbname>[0-9A-Za-z]*)"
+        )
+
+    @property
+    def get(self) -> dict:
+        return re.search(self.pattern, DATABASE_URL).groupdict()
 
 
 class PostSQL:
     def __init__(self, msg: Message = None, set_private=False) -> None:
-        self.conn = psycopg2.connect(
-            dbname=DB_NAME, user=DB_USER,
-            password=DB_PASS, host=DB_HOST
-        )
+        self.conn = psycopg2.connect(**PostgreSQL_Paser().get)
         self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         self.taker = lambda x: "-" if x else "+"
 
@@ -199,10 +209,7 @@ class PostSQL:
 
 class PostSQL_ChatManager:
     def __init__(self, msg: Message, msg_user: Message = None) -> None:
-        self.conn = psycopg2.connect(
-            dbname=DB_NAME, user=DB_USER,
-            password=DB_PASS, host=DB_HOST
-        )
+        self.conn = psycopg2.connect(**PostgreSQL_Paser().get)
         self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         if msg.chat.type in ["group", "supergroup"]:
@@ -262,10 +269,7 @@ class PostSQL_ChatManager:
 
 class PostSQL_Inventory:
     def __init__(self, msg: Message) -> None:
-        self.conn = psycopg2.connect(
-            dbname=DB_NAME, user=DB_USER,
-            password=DB_PASS, host=DB_HOST
-        )
+        self.conn = psycopg2.connect(**PostgreSQL_Paser().get)
         self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         self.user_id = msg.from_user.id
