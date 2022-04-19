@@ -13,7 +13,7 @@ async def give_item(message: Message, item_id: int) -> bool:
     Выдача предмета
     :param message: Тело сообщения
     :param item_id: Айди предмета который нужно выдать
-    :return: Success bool
+    :return: bool
     """
     if len(database.PostSQL_Inventory(message).get_inventory()) < 50:
         try:
