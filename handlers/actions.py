@@ -325,21 +325,21 @@ async def give_money(message: types.Message):
 
 
 # Выдача предметов от владельца бота
-@dp.message_handler(commands=['give_item'], is_owner=True)
-@rate_limit(3, 'give_items')
-async def give_item(message: types.Message):
-    try:
-        u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
-        data = database.PostSQL(message).check_user(custom_user=u_)
-        x = await init_give(message, s_, u_, "Администрация")
-        if x:
-            bot_msg = await message.reply("Для <b>%s</b> было выдано %s <b>%s</b>!" % (
-                data["name"], all_items[s_]["icon"], all_items[s_]["name"]
-            ))
-    except Exception as e:
-        logging.debug(e)
-        bot_msg = await message.reply("/give_item *получатель* *ID предмета*")
-    await cleaner_body(bot_msg, message)
+# @dp.message_handler(commands=['give_item'], is_owner=True)
+# @rate_limit(3, 'give_items')
+# async def give_item(message: types.Message):
+#     try:
+#         u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
+#         data = database.PostSQL(message).check_user(custom_user=u_)
+#         x = await init_give(message, s_, u_, "Администрация")
+#         if x:
+#             bot_msg = await message.reply("Для <b>%s</b> было выдано %s <b>%s</b>!" % (
+#                 data["name"], all_items[s_]["icon"], all_items[s_]["name"]
+#             ))
+#     except Exception as e:
+#         logging.debug(e)
+#         bot_msg = await message.reply("/give_item *получатель* *ID предмета*")
+#     await cleaner_body(bot_msg, message)
 
 
 # Если у пользователя нет прав на эту команду
