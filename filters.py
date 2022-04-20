@@ -17,6 +17,20 @@ class IsOwnerFilter(BoundFilter):
         return int(message.from_user.id) == int(config.BOT_OWNER)
 
 
+class IsBotAdminFilter(BoundFilter):
+    """
+    Custom filter "is_bot_admin".
+    """
+    key = "is_bot_admin"
+
+    def __init__(self, is_bot_admin):
+        self.is_bot_admin = is_bot_admin
+
+    async def check(self, message: types.Message):
+        return (int(message.from_user.id) == int(config.BOT_OWNER)) or \
+               (int(message.from_user.id) in config.BOT_ADMINS)
+
+
 class IsAdminFilter(BoundFilter):
     """
     Filter that checks for admin rights existence

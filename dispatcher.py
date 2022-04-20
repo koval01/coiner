@@ -4,7 +4,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 import config
 from filters import IsOwnerFilter, IsAdminFilter, MemberCanRestrictFilter, \
-    IsPrivateFilter, IsGroupFilter
+    IsPrivateFilter, IsGroupFilter, IsBotAdminFilter
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -24,3 +24,4 @@ dp.filters_factory.bind(IsAdminFilter)
 dp.filters_factory.bind(MemberCanRestrictFilter)
 dp.filters_factory.bind(IsPrivateFilter)
 dp.filters_factory.bind(IsGroupFilter)
+dp.filters_factory.bind(IsBotAdminFilter)

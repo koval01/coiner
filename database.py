@@ -59,9 +59,9 @@ class PostSQL:
                 'select * from wallet where user_id = %(user_id)s',
                 {'user_id': self.user_id},
             )
-            result = self.cursor.fetchall()
+            result = self.cursor.fetchone()
             self.finish
-            return result[0]
+            return result
         except Exception as e:
             logging.debug(e)
 
@@ -163,17 +163,24 @@ class PostSQL:
     @property
     def get_sum_balance(self) -> int:
         self.cursor.execute(
-            'select sum(balance) from wallet limit 1',
+            'select sum(balance) from wallet',
         )
-        result = self.cursor.fetchall()
+        result = self.cursor.fetchone()
         self.finish
-        return result[0][0]
+        return result["sum"]
 
     @property
-    def get_top_balance(self) -> int:
+    def get_top_balance(self) -> list:
         self.cursor.execute(
             'select name, balance, user_id from wallet order by balance desc limit 10',
         )
+        result = self.cursor.fetchall()
+        self.finish
+        return result
+
+    @property
+    def get_users_ids_list(self) -> list:
+        self.cursor.execute('select user_id from wallet')
         result = self.cursor.fetchall()
         self.finish
         return result

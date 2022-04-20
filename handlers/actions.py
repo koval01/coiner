@@ -8,7 +8,7 @@ from aiogram.utils.exceptions import Throttled
 import config
 import database
 from additional.buy_slave import init_transaction_ as slave_buy_
-from dispatcher import dp
+from dispatcher import dp, bot
 from additional.entertainment import ask_, fagot_
 from additional.give import init_give
 from additional.inventory import take_item, item_dice, give_item, take_all_items
@@ -337,6 +337,30 @@ async def give_money(message: types.Message):
         logging.debug(e)
         bot_msg = await message.reply("/give *получатель* *сумма*")
     await cleaner_body(bot_msg, message)
+
+
+@dp.message_handler(commands=['news_send'], is_bot_admin=True, is_private=True)
+@rate_limit(60, 'news_send')
+async def give_money(message: types.Message):
+    try:
+        text = int(message.text.split()[1])
+        if 10 < len(text) > 2000:
+            await message.reply("Минимальная длина сообщения 10 символов, а максимальная 2000.")
+            return
+        news_text = f"«{text}»\n— Администратор <b>{message.from_user.full_name}</b>"
+        users = database.PostSQL(message).get_users_ids_list
+        for r in users:
+            await bot.send_message(r["user_id"], news_text)
+    except Exception as e:
+        logging.debug(e)
+        bot_msg = await message.reply("/give *получатель* *сумма*")
+    await cleaner_body(bot_msg, message)
+
+
+@dp.message_handler(commands=['news_send'], is_bot_admin=False, is_private=True)
+@rate_limit(60, 'news_send_no_access')
+async def give_money_no_access(message: types.Message):
+    await message.reply("У тебя нет прав для этого.")
 
 
 # Выдача предметов от владельца бота

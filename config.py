@@ -2,6 +2,7 @@ import os
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 BOT_OWNER = os.getenv("BOT_OWNER")
+BOT_ADMINS = [int(i) for i in os.getenv("BOT_ADMINS").split()]
 
 DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
