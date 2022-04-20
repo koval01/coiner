@@ -299,10 +299,10 @@ async def dice_switch_group_admin(message: types.Message):
 async def inv_switch(message: types.Message):
     if database.PostSQL(message).get_inv_sort_mode:
         database.PostSQL(message).set_inv_sort_mode()
-        bot_msg = await message.reply("Теперь инвентарь сортируется по <b>предметах</b>")
+        bot_msg = await message.reply("Теперь инвентарь сортируется по <b>идентификаторах</b>")
     else:
         database.PostSQL(message).set_inv_sort_mode(state=1)
-        bot_msg = await message.reply("Теперь инвентарь сортируется по <b>идентификаторах</b>")
+        bot_msg = await message.reply("Теперь инвентарь сортируется по <b>предметах</b>")
     await cleaner_body(bot_msg, message)
 
 
