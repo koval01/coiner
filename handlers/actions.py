@@ -343,7 +343,7 @@ async def give_money(message: types.Message):
 @rate_limit(5, 'news_send')
 async def give_money(message: types.Message):
     try:
-        text = int(message.text.split()[1])
+        text = message.text.replace("/news_send ", "")
         if 10 < len(text) > 2000:
             await message.reply("Минимальная длина сообщения 10 символов, а максимальная 2000.")
             return
