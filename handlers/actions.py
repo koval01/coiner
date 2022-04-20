@@ -340,7 +340,7 @@ async def give_money(message: types.Message):
 
 
 @dp.message_handler(commands=['news_send'], is_bot_admin=True, is_private=True)
-@rate_limit(60, 'news_send')
+@rate_limit(5, 'news_send')
 async def give_money(message: types.Message):
     try:
         text = int(message.text.split()[1])
@@ -358,7 +358,7 @@ async def give_money(message: types.Message):
 
 
 @dp.message_handler(commands=['news_send'], is_bot_admin=False, is_private=True)
-@rate_limit(60, 'news_send_no_access')
+@rate_limit(2, 'news_send_no_access')
 async def give_money_no_access(message: types.Message):
     await message.reply("У тебя нет прав для этого.")
 
