@@ -48,9 +48,10 @@ async def private_balance_create(message: Message, pass_check=False, cust_usr=0)
     else:
         database.PostSQL(message, set_private=pass_check).add_user(custom_user=cust_usr)
         database.PostSQL(message, set_private=pass_check).modify_balance(config.START_BALANCE, custom_user=cust_usr)
-        await message.reply("Привет <b>%s</b>, твой счёт успешно создан. Также тебе было начислено <b>%d</b> гривен!" % (
-            message.from_user.first_name, config.START_BALANCE
-        ))
+        await message.reply(
+            "Привет <b>%s</b>, твой счёт успешно создан. Также тебе было начислено <b>%d</b> гривен!" % (
+                message.from_user.first_name, config.START_BALANCE
+            ))
 
 
 # Создание счёта, доступно тоже для всех
@@ -186,8 +187,10 @@ async def search_user(message: types.Message):
         comment = ""
         if len(text) >= 3 and len(text) <= 25:
             data = database.PostSQL().search_user(text)
-            top_ = ["<i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
-                    (i["name"], human_format(int(i["balance"])), i["user_id"]) for i in data]
+            username_set = lambda field: f"@{field}" if field else "No_username"
+            top_ = ["<i>%s</i> (<code>%s</code>) <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
+                    (i["name"], username_set(i["username"]), human_format(int(i["balance"])), i["user_id"]
+                     ) for i in data]
             if len(top_) == 0:
                 bot_msg = await message.reply("Ничего не найдено.")
                 await cleaner_body(bot_msg, message)
