@@ -353,7 +353,7 @@ async def give_money(message: types.Message):
             await bot.send_message(r["user_id"], news_text)
     except Exception as e:
         logging.debug(e)
-        bot_msg = await message.reply("/give *получатель* *сумма*")
+        bot_msg = await message.reply("/news_send *сообщение*")
     await cleaner_body(bot_msg, message)
 
 
