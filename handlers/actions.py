@@ -291,6 +291,18 @@ async def dice_switch_group_admin(message: types.Message):
     await cleaner_body(bot_msg, message)
 
 
+@dp.message_handler(commands=['inv_switch'], is_private=True)
+@rate_limit(3, 'inv_switch')
+async def inv_switch(message: types.Message):
+    if database.PostSQL(message).get_inv_sort_mode:
+        database.PostSQL(message).set_inv_sort_mode(state=1)
+        bot_msg = await message.reply("Теперь инвентарь сортируется по <b>предметах</b>")
+    else:
+        database.PostSQL(message).set_inv_sort_mode()
+        bot_msg = await message.reply("Теперь инвентарь сортируется по <b>идентификаторах</b>")
+    await cleaner_body(bot_msg, message)
+
+
 # Если вызвал участник группы, без прав администратора
 @dp.message_handler(commands=['pay'], is_admin=False)
 @rate_limit(30, 'not_privileged_pay_group')

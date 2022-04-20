@@ -123,6 +123,14 @@ class PostSQL:
         self.finish
         return result["inv_sort_mode"]
 
+    def set_inv_sort_mode(self, state: int = 0) -> None:
+        self.cursor.execute(
+            'update wallet set inv_sort_mode = %(state)s where user_id = %(user_id)s',
+            {'user_id': self.user_id, 'state': state},
+        )
+        self.conn.commit()
+        self.finish
+
     @property
     def get_last_slaves_message(self) -> int:
         self.cursor.execute(
