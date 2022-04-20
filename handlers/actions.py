@@ -356,8 +356,7 @@ async def give_money(message: types.Message):
                 pass
     except Exception as e:
         logging.error(e)
-        bot_msg = await message.reply("/news_send *сообщение*")
-    await cleaner_body(bot_msg, message)
+        await message.reply("/news_send *сообщение*")
 
 
 @dp.message_handler(commands=['news_send'], is_bot_admin=False, is_private=True)
