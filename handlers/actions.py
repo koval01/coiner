@@ -187,7 +187,7 @@ async def search_user(message: types.Message):
         comment = ""
         if len(text) >= 3 and len(text) <= 25:
             data = database.PostSQL().search_user(text)
-            username_set = lambda field: f"<code>@{field}</code>" if field else "No username"
+            username_set = lambda field: f"<code>@{field}</code>" if field and field != "@group" else "No username"
             top_ = ["<i>%s</i> (%s) <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
                     (i["name"], username_set(i["username"]), human_format(int(i["balance"])), i["user_id"]
                      ) for i in data]
