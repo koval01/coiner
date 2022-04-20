@@ -187,8 +187,8 @@ async def search_user(message: types.Message):
         comment = ""
         if len(text) >= 3 and len(text) <= 25:
             data = database.PostSQL().search_user(text)
-            username_set = lambda field: f"@{field}" if field else "No_username"
-            top_ = ["<i>%s</i> (<code>%s</code>) <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
+            username_set = lambda field: f"<code>@{field}</code>" if field else "No username"
+            top_ = ["<i>%s</i> (%s) <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
                     (i["name"], username_set(i["username"]), human_format(int(i["balance"])), i["user_id"]
                      ) for i in data]
             if len(top_) == 0:
