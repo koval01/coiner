@@ -350,7 +350,10 @@ async def give_money(message: types.Message):
         news_text = f"«{text}»\n— Администратор <b>{message.from_user.full_name}</b>"
         users = database.PostSQL(message).get_users_ids_list
         for r in users:
-            await bot.send_message(r["user_id"], news_text)
+            try:
+                await bot.send_message(r["user_id"], news_text)
+            except:
+                pass
     except Exception as e:
         logging.error(e)
         bot_msg = await message.reply("/news_send *сообщение*")
