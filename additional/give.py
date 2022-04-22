@@ -2,7 +2,7 @@ import logging
 from aiogram.types.message import Message
 
 import database
-from special.utils import notify_, get_name_
+from special.utils import Utils
 from config import SLAVES_PAY_NOTIFY
 
 
@@ -21,7 +21,7 @@ async def init_give(message: Message = None,
     :return:
     """
     if message:
-        name_ = await get_name_(message)
+        name_ = await Utils().get_name_(message)
     else:
         name_ = custom_name
 
@@ -40,7 +40,7 @@ async def init_give(message: Message = None,
     if not item_sell:
         if slaves_mode and not SLAVES_PAY_NOTIFY:
             return
-        await notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>" % (
+        await Utils().notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>" % (
             sum_, name_
         ), user_, need_delete=slaves_mode)
 

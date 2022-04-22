@@ -15,7 +15,7 @@ from additional.inventory import take_item, item_dice, give_item, take_all_items
 from additional.items import items_ as all_items
 from additional.pay import init_pay
 from special.throttling import rate_limit
-from special.utils import human_format
+from special.utils import Utils
 from .cleaner import cleaner_body
 
 
@@ -101,6 +101,7 @@ async def wallet_group(message: types.Message):
 @rate_limit(3, 'pay_private')
 async def pay_in_private(message: types.Message):
     try:
+        bot_msg = None
         u_, s_ = int(message.text.split()[1]), int(message.text.split()[2])
         if u_ == message.chat.id:
             bot_msg = await message.reply("Какое-то странное действие.")
@@ -160,7 +161,7 @@ async def user_inventory(message: types.Message):
         data = database.PostSQL_Inventory(message).get_inventory(inv_user_id)
         sort_mode = database.PostSQL(message).get_inv_sort_mode
         items_price = sum([all_items[el["item_id"]]["price"] for el in data])
-        price_text = "Общая цена <code>%s</code> гривен" % human_format(items_price)
+        price_text = "Общая цена <code>%s</code> гривен" % Utils().human_format(items_price)
         formatted_list = [{
             "id": i["id"], "icon": all_items[i["item_id"]]["icon"],
             "name": all_items[i["item_id"]]["name"], "price": all_items[i["item_id"]]["price"]
@@ -189,7 +190,7 @@ async def search_user(message: types.Message):
             data = database.PostSQL().search_user(text)
             username_set = lambda field: f"<code>@{field}</code>" if field and field != "@group" else "No username"
             top_ = ["<i>%s</i> (%s) <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
-                    (i["name"], username_set(i["username"]), human_format(int(i["balance"])), i["user_id"]
+                    (i["name"], username_set(i["username"]), Utils().human_format(int(i["balance"])), i["user_id"]
                      ) for i in data]
             if len(top_) == 0:
                 bot_msg = await message.reply("Ничего не найдено.")
@@ -250,7 +251,8 @@ async def sell_all_items(message: types.Message):
         x = await take_all_items(message)
         if x:
             await init_give(message, items_price, item_sell=True)
-            bot_msg = await message.reply("Предметы были проданы за <b>%s</b> гривен!" % human_format(items_price))
+            bot_msg = await message.reply(
+                "Предметы были проданы за <b>%s</b> гривен!" % Utils().human_format(items_price))
         else:
             bot_msg = await message.reply("Не удалось продать предметы.")
     except Exception as e:
@@ -458,12 +460,12 @@ async def top_users(message: types.Message):
     data = database.PostSQL(message).get_top_balance
     top_ = "\n".join(
         ["<b>%d.</b> <i>%s</i> <b>-</b> <code>%s</code> <b>гривен</b> | <b>«<code>%d</code>»</b>" %
-         (i + 1, e["name"], human_format(int(e["balance"])), e["user_id"]) for i, e in enumerate(data)]
+         (i + 1, e["name"], Utils().human_format(int(e["balance"])), e["user_id"]) for i, e in enumerate(data)]
     )
     bot_msg = await message.reply("%s\n\n%s\n\n%s" % (
         "<b>- Топ 10 -</b>", top_,
         "<i>Общая сумма у всех пользователей бота</i> <code>%s</code> <b>гривен</b>" %
-        human_format(int(database.PostSQL(message).get_sum_balance))
+        Utils().human_format(int(database.PostSQL(message).get_sum_balance))
     ))
     await cleaner_body(bot_msg, message)
 

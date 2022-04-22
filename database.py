@@ -4,7 +4,7 @@ import re
 import psycopg2
 import psycopg2.extras
 from aiogram.types.message import Message
-from special.utils import cleaner_name
+from special.utils import Utils
 
 from config import DATABASE_URL
 
@@ -42,7 +42,7 @@ class PostSQL:
                 self.username = "@group"
             elif msg.chat.type == "private" or set_private:
                 self.user_id = msg.from_user.id
-                self.name = cleaner_name(msg.from_user.first_name)
+                self.name = Utils().cleaner_name(msg.from_user.first_name)
                 self.username = msg.from_user.username
         except Exception as e:
             logging.debug(e)
@@ -239,7 +239,7 @@ class PostSQL_ChatManager:
 
         if msg.chat.type in ["group", "supergroup"]:
             self.chat_id = msg.chat.id
-            self.name = cleaner_name(msg.chat.title)
+            self.name = Utils().cleaner_name(msg.chat.title)
             self.message_id = msg.message_id
         elif msg.chat.type == "private":
             return
@@ -298,7 +298,7 @@ class PostSQL_Inventory:
         self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         self.user_id = msg.from_user.id
-        self.name = cleaner_name(msg.from_user.first_name)
+        self.name = Utils().cleaner_name(msg.from_user.first_name)
         self.username = msg.from_user.username
 
         # Inventory for only private chats IDs

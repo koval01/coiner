@@ -4,11 +4,11 @@ from aiogram.types.message import Message
 
 import config
 import database
-from special.utils import get_name_, notify_
+from special.utils import Utils
 from handlers.cleaner import cleaner_body
 
 
-async def init_pay(message: Message, sum_: int, user_: int, slaves_mode: bool = False) -> None:
+async def init_pay(message: Message, sum_: int, user_: int, slaves_mode: bool = False) -> bool:
     """
     Функция для передачи гривен
     :param message: Тело сообщения
@@ -16,23 +16,23 @@ async def init_pay(message: Message, sum_: int, user_: int, slaves_mode: bool = 
     :param user_: Получатель
     :return:
     """
-    name_ = await get_name_(message)
+    name_ = await Utils().get_name_(message)
 
     try:
         if not database.PostSQL(message).check_user(custom_user=user_):
             bot_msg = await message.reply("Ошибка, не удалось найти получателя.")
             await cleaner_body(bot_msg, message)
-            return
+            return False
 
         if int(database.PostSQL(message).check_user()[2]) < sum_:
             bot_msg = await message.reply("Недостаточно гривен!")
             await cleaner_body(bot_msg, message)
-            return
+            return False
 
         if sum_ < 100:
             bot_msg = await message.reply("Минимум 100 гривен!")
             await cleaner_body(bot_msg, message)
-            return
+            return False
 
         # Сначала пробуем снять монеты со счёта отправителя
         try:
@@ -41,7 +41,7 @@ async def init_pay(message: Message, sum_: int, user_: int, slaves_mode: bool = 
             )
         except Exception as e:
             logging.error(e)
-            return
+            return False
 
         # Посчитаем комиссию
         recount_ = (config.COM_TRANS / 100)
@@ -55,10 +55,10 @@ async def init_pay(message: Message, sum_: int, user_: int, slaves_mode: bool = 
             )
         except Exception as e:
             logging.error(e)
-            return
+            return False
 
         # Уведомим получателя
-        await notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>, комиссия <b>%d%%</b>" % (
+        await Utils().notify_("На счёт было зачислено <b>%d</b> гривен от <b>%s</b>, комиссия <b>%d%%</b>" % (
             com_result, name_, config.COM_TRANS
         ), user_, need_delete=slaves_mode)
 
@@ -67,6 +67,6 @@ async def init_pay(message: Message, sum_: int, user_: int, slaves_mode: bool = 
                                       " и убедитесь - существует ли получатель.")
         logging.warning(e)
         await cleaner_body(bot_msg, message)
-        return
+        return False
 
     return True
