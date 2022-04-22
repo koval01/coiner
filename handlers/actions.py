@@ -341,7 +341,7 @@ async def give_money(message: types.Message):
 
 @dp.message_handler(commands=['news_send'], is_bot_admin=True, is_private=True)
 @rate_limit(5, 'news_send')
-async def give_money(message: types.Message):
+async def news_send(message: types.Message):
     try:
         text = message.text.replace("/news_send ", "")
         if 10 < len(text) > 2000:
