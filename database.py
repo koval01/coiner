@@ -22,7 +22,7 @@ class PostgreSQL_Paser(object):
 
 
 class PostSQL:
-    def __init__(self, msg: Message = None, set_private=False) -> None:
+    def __init__(self, msg: Message = None, set_private: bool = False) -> None:
         self.conn = psycopg2.connect(**PostgreSQL_Paser().get)
         self.cursor = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         self.taker = lambda x: "-" if x else "+"
@@ -52,7 +52,7 @@ class PostSQL:
         self.cursor.close()
         self.conn.close()
 
-    def check_user(self, custom_user=0) -> list:
+    def check_user(self, custom_user: int = 0) -> dict:
         if custom_user: self.user_id = custom_user
         try:
             self.cursor.execute(
@@ -63,7 +63,7 @@ class PostSQL:
             self.finish
             return result
         except Exception as e:
-            logging.debug(e)
+            logging.error(e)
 
     @property
     def modify_last_msg_slaves(self) -> None:
@@ -87,9 +87,9 @@ class PostSQL:
             self.finish
             return result
         except Exception as e:
-            logging.debug(e)
+            logging.warning(e)
 
-    def add_user(self, custom_user=0) -> None:
+    def add_user(self, custom_user: int = 0) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'insert into wallet(name, balance, user_id, username, slaves) '
@@ -103,7 +103,7 @@ class PostSQL:
         self.conn.commit()
         self.finish
 
-    def get_balance(self, custom_user=0) -> int:
+    def get_balance(self, custom_user: int = 0) -> int:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'select balance from wallet where user_id = %(user_id)s',
@@ -141,7 +141,7 @@ class PostSQL:
         self.finish
         return result["slaves_last_msg"]
 
-    def get_dice_on(self, custom_user=0) -> float:
+    def get_dice_on(self, custom_user: int = 0) -> float:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'select dice_on from wallet where user_id = %(user_id)s',
@@ -151,7 +151,7 @@ class PostSQL:
         self.finish
         return result["dice_on"]
 
-    def update_dice_on(self, custom_user=0, status: bool = True) -> None:
+    def update_dice_on(self, custom_user: int = 0, status: bool = True) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'update wallet set dice_on = %(status)s where user_id = %(user_id)s',
@@ -185,7 +185,7 @@ class PostSQL:
         self.finish
         return result
 
-    def modify_name_(self, name, custom_user=0) -> None:
+    def modify_name_(self, name: str, custom_user: int = 0) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'update wallet set name = %(name)s where user_id = %(user_id)s',
@@ -194,7 +194,7 @@ class PostSQL:
         self.conn.commit()
         self.finish
 
-    def modify_balance(self, coins, take=False, custom_user=0) -> None:
+    def modify_balance(self, coins: int, take: bool = False, custom_user: int = 0) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             f'update wallet set balance = balance {self.taker(take)} %(coins)s where user_id = %(user_id)s',
@@ -203,7 +203,7 @@ class PostSQL:
         self.conn.commit()
         self.finish
 
-    def modify_slaves(self, slaves=1, take=False, custom_user=0) -> None:
+    def modify_slaves(self, slaves: int = 1, take: bool = False, custom_user: int = 0) -> None:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             f'update wallet set slaves = slaves {self.taker(take)} %(slaves)s where user_id = %(user_id)s',
@@ -212,7 +212,7 @@ class PostSQL:
         self.conn.commit()
         self.finish
 
-    def get_slaves(self, custom_user=0) -> int:
+    def get_slaves(self, custom_user: int = 0) -> int:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'select slaves from wallet where user_id = %(user_id)s limit 1',
@@ -223,7 +223,7 @@ class PostSQL:
         return result["slaves"]
 
     @property
-    def get_slave_owners(self) -> int:
+    def get_slave_owners(self) -> list:
         self.cursor.execute(
             'select user_id, slaves from wallet where slaves > 0',
         )
@@ -255,14 +255,14 @@ class PostSQL_ChatManager:
         self.conn.close()
 
     @property
-    def get_last_message(self) -> list:
+    def get_last_message(self) -> dict:
         self.cursor.execute(
             'select chat_id, last_message_id, last_user_message_id from chat where chat_id = %(chat_id)s limit 1',
             {'chat_id': self.chat_id}
         )
-        result = self.cursor.fetchall()
+        result = self.cursor.fetchone()
         self.finish
-        return result[0]
+        return result
 
     @property
     def add_new_chat(self) -> None:
@@ -308,7 +308,7 @@ class PostSQL_Inventory:
         self.cursor.close()
         self.conn.close()
 
-    def get_inventory(self, custom_user=0) -> int:
+    def get_inventory(self, custom_user: int = 0) -> list:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'select item_id, id from inventory where owner_id = %(user_id)s order by id desc',
@@ -318,17 +318,17 @@ class PostSQL_Inventory:
         self.finish
         return result
 
-    def get_item(self, item_id_row, custom_user=0) -> int:
+    def get_item(self, item_id_row: int, custom_user: int = 0) -> dict:
         if custom_user: self.user_id = custom_user
         self.cursor.execute(
             'select item_id, id, owner_id from inventory where id = %(item_id)s',
             {'item_id': item_id_row},
         )
-        result = self.cursor.fetchall()
+        result = self.cursor.fetchone()
         self.finish
-        return result[0]
+        return result
 
-    def give_item(self, item_id) -> None:
+    def give_item(self, item_id: int) -> None:
         self.cursor.execute(
             'insert into inventory(owner_id, item_id) values (%(chat)s, %(item)s)',
             {
@@ -339,7 +339,7 @@ class PostSQL_Inventory:
         self.conn.commit()
         self.finish
 
-    def take_item(self, item_id_row) -> None:
+    def take_item(self, item_id_row: int) -> None:
         self.cursor.execute(
             'delete from inventory where id = %(item_id)s',
             {
