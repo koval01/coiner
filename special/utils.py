@@ -106,5 +106,6 @@ class Utils:
         s = "ны"
         t = "ен"
         return p + f if (v == "1" and len(v) == 1) \
-            else (p + s if (5 > int(v) >= 2) else (p + s if (len(v) >= 1 and (5 > int(v[-1:]) >= 2))
-                                                   else (p + f if (int(v[-1:]) == 1) else p + t)))
+            else (p + s if 5 > int(v) >= 2 \
+                      else (p + s if (len(v) >= 1 and (int(v[-2:]) > 20) and (5 > int(v[-1:]) >= 2))
+                            else (p + f if (int(v[-1:]) == 1 and (int(v[-2:]) > 20)) else p + t)))
