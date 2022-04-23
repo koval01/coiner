@@ -99,7 +99,7 @@ class Utils:
         pattern = re.compile(r"(?P<command>\/[A-Za-z_@]*?)\s(?P<text>[\W\S]*)")
         return re.search(pattern, full_text).group("text")
 
-    def coins_formatter(self, v: float) -> str:
+    def coins_formatter(self, v: int) -> str:
         v = str(int(v))
         p = f"{v} грив"
         f = "на"
