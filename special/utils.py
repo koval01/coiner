@@ -99,12 +99,12 @@ class Utils:
         pattern = re.compile(r"(?P<command>\/[A-Za-z_@]*?)\s(?P<text>[\W\S]*)")
         return re.search(pattern, full_text).group("text")
 
-    def coins_formatter(self, v: int) -> str:
+    def coins_formatter(self, v: float) -> str:
         v = str(v)
         p = f"{v} грив"
         f = "на"
         s = "ны"
         t = "ен"
         return p + f if (v == "1" and len(v) == 1) \
-            else (p + s if 5 > int(v) >= 2 else (p + s if (len(v) >= 1 and (5 > int(v[-1:]) >= 2))
-                                                 else (p + f if (int(v[-1:]) == 1) else p + t)))
+            else (p + s if (5 > int(v) >= 2) else (p + s if (len(v) >= 1 and (5 > int(v[-1:]) >= 2))
+                                                   else (p + f if (int(v[-1:]) == 1) else p + t)))
