@@ -100,7 +100,7 @@ class Utils:
         return re.search(pattern, full_text).group("text")
 
     def coins_formatter(self, v: float) -> str:
-        v = str(v)
+        v = str(int(v))
         p = f"{v} грив"
         f = "на"
         s = "ны"
