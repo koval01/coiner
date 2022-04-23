@@ -3,8 +3,7 @@ from random import uniform, randint
 
 from aiogram import types
 from aiogram.types.message import Message
-from aiogram.Utils().exceptions
-import Throttled
+from aiogram.utils.exceptions import Throttled
 
 import config
 import database
