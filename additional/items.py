@@ -84,7 +84,7 @@ items_ = [
     {'id': 75, 'name': 'Флаг Испании', 'price': 400, 'chance_drop': 0.5, 'icon': '🇪🇸'},
     {'id': 76, 'name': 'Флаг Китая', 'price': 400, 'chance_drop': 0.5, 'icon': '🇨🇳'},
     {'id': 77, 'name': 'Флаг Японии', 'price': 400, 'chance_drop': 0.5, 'icon': '🇯🇵'},
-    {'id': 78, 'name': 'Флаг Кореии', 'price': 400, 'chance_drop': 0.5, 'icon': '🇰🇷'},
+    {'id': 78, 'name': 'Флаг Кореи', 'price': 400, 'chance_drop': 0.5, 'icon': '🇰🇷'},
     {'id': 79, 'name': 'Флаг Индии', 'price': 400, 'chance_drop': 0.5, 'icon': '🇮🇳'},
     {'id': 80, 'name': 'Флаг Бразилии', 'price': 400, 'chance_drop': 0.5, 'icon': '🇧🇷'},
     {'id': 81, 'name': 'Флаг Германии', 'price': 400, 'chance_drop': 0.5, 'icon': '🇩🇪'},
