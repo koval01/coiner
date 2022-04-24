@@ -16,9 +16,14 @@ class Analytics:
     async def request(self, params: dict, json: dict) -> None:
         async with ClientSession() as session:
             try:
-                await session.post(
-                    f"https://{self.host}/{self.path}", json=json, params=params
-                )
+                async with session.post(
+                        f"https://{self.host}/{self.path}", json=json, params=params
+                ) as response:
+                    if response.status >= 200 < 300:
+                        logging.debug("OK code Google Analytics")
+                    else:
+                        logging.warning(f"Error code Google Analytics: {response.status}. "
+                                        f"Detail response: {response.text[:512]}")
             except Exception as e:
                 logging.warning(
                     f"Error sending request to Google Analytics. "
