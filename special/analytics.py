@@ -43,13 +43,13 @@ class Analytics:
             }],
         }
 
-    async def send(self, message: types.Message) -> None:
+    async def send(self, message: types.Message, alt_action: str = None) -> None:
         await self.request({
             "measurement_id": self.id, "api_secret": self.secret
         }, self.build_payload(
             message.from_user.id,
             message.from_user.language_code,
-            message.get_command()[1:]
+            message.get_command()[1:] if not alt_action else alt_action
         ))
 
     def __str__(self) -> str:

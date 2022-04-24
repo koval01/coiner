@@ -527,3 +527,4 @@ async def group_echo(message: types.Message):
                 Utils().coins_formatter(value_)
             )
         await cleaner_body(bot_msg)
+    await Analytics().send(message, alt_action="group_echo")
