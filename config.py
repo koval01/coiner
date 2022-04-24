@@ -11,6 +11,9 @@ DB_PASS = os.getenv("DB_PASS")
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+GA_ID = os.getenv("GA_ID")
+GA_SECRET = os.getenv("GA_SECRET")
+
 START_BALANCE = 5000
 START_XP = 0
 STATIC_PRICE_DICE = 1000
