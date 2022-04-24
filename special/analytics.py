@@ -2,6 +2,7 @@ import logging
 
 from config import GA_ID, GA_SECRET
 from aiohttp import ClientSession
+from aiogram import types
 
 
 class Analytics:
@@ -37,10 +38,14 @@ class Analytics:
             }],
         }
 
-    async def send(self, user_id: int, user_lang_code: str, action_name: str) -> None:
+    async def send(self, message: types.Message) -> None:
         await self.request({
             "measurement_id": self.id, "api_secret": self.secret
-        }, self.build_payload(user_id, user_lang_code, action_name))
+        }, self.build_payload(
+            message.from_user.id,
+            message.from_user.language_code,
+            message.get_command()
+        ))
 
     def __str__(self) -> str:
         return self.id

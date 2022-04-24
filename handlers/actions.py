@@ -16,6 +16,7 @@ from additional.items import items_ as all_items
 from additional.pay import init_pay
 from special.throttling import rate_limit
 from special.utils import Utils
+from special.analytics import Analytics
 from .cleaner import cleaner_body
 
 
@@ -59,6 +60,7 @@ async def private_balance_create(message: Message, pass_check=False, cust_usr=0)
 @rate_limit(3, 'start_private')
 async def start_for_private(message: types.Message):
     await private_balance_create(message)
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['start'], is_group=True)
@@ -75,6 +77,7 @@ async def start_for_group(message: types.Message):
             Utils().coins_formatter(config.START_BALANCE)
         )
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Проверка баланса, работает без всяких ограничений
@@ -85,6 +88,7 @@ async def wallet_private(message: types.Message):
     bot_msg = await message.reply(
         "Твой баланс: %s\nНомер счёта: «<code>%d</code>»" % (Utils().coins_formatter(data["balance"]), data["user_id"]))
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # И команда для групп конечно
