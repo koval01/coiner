@@ -49,7 +49,7 @@ class Analytics:
         }, self.build_payload(
             message.from_user.id,
             message.from_user.language_code,
-            message.get_command()
+            message.get_command()[1:]
         ))
 
     def __str__(self) -> str:
