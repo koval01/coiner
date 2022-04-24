@@ -13,7 +13,7 @@ class Analytics:
         self.host = "www.google-analytics.com"
         self.path = "mp/collect"
 
-    async def request(self, json: dict, params: dict) -> None:
+    async def request(self, params: dict, json: dict) -> None:
         async with ClientSession() as session:
             try:
                 await session.post(
