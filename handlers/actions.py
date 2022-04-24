@@ -100,6 +100,7 @@ async def wallet_group(message: types.Message):
         "Баланс группы: %s\nНомер счёта группы: «<code>%d</code>»" % (
             Utils().coins_formatter(data["balance"]), data["user_id"]))
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Если вызвали из приватного чата
@@ -122,6 +123,7 @@ async def pay_in_private(message: types.Message):
         logging.debug(e)
         bot_msg = await message.reply("/pay *получатель* *сумма*")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['buyslave'])
@@ -134,6 +136,7 @@ async def buy_slave_private(message: types.Message):
             await cleaner_body(bot_msg, message)
     except Exception as e:
         logging.debug(e)
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['slaves'])
@@ -145,6 +148,7 @@ async def user_slaves(message: types.Message):
         data, Utils().coins_formatter(data * config.PAY_PER_SLAVE)
     ))
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Можно даже глянуть свой инвентарь
@@ -184,6 +188,7 @@ async def user_inventory(message: types.Message):
         logging.debug("Error in inventory function: %s" % e)
         bot_msg = await message.reply("Что-то пошло не так...")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['search'])
@@ -213,6 +218,7 @@ async def search_user(message: types.Message):
         logging.error("Error search user. Details: %s" % e)
         bot_msg = await message.reply("Пример - /search elo")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Продажа предметов
@@ -245,6 +251,7 @@ async def sell__(message: types.Message):
             "Флаг США (15000 гривен)"
         )
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Продажа всего инвентаря сразу
@@ -265,6 +272,7 @@ async def sell_all_items(message: types.Message):
         logging.info(e)
         bot_msg = await message.reply("Произошла ошибка, похоже что у тебя нет предметов.")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Если вызвал админ из группы
@@ -288,6 +296,7 @@ async def pay_group_admin(message: types.Message):
         logging.debug(e)
         bot_msg = await message.reply("/pay *получатель* *сумма*")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['dice_switch'], is_admin=True)
@@ -300,6 +309,7 @@ async def dice_switch_group_admin(message: types.Message):
         database.PostSQL(message).update_dice_on(message.chat.id, status=True)
         bot_msg = await message.reply("Теперь в этой группе <b>можно</b> использовать dice")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['inv_switch'], is_private=True)
@@ -312,6 +322,7 @@ async def inv_switch(message: types.Message):
         database.PostSQL(message).set_inv_sort_mode(state=1)
         bot_msg = await message.reply("Теперь инвентарь сортируется по <b>предметах</b>")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Если вызвал участник группы, без прав администратора
@@ -345,6 +356,7 @@ async def give_money(message: types.Message):
         logging.debug(e)
         bot_msg = await message.reply("/give *получатель* *сумма*")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['news_send'], is_bot_admin=True, is_private=True)
@@ -365,6 +377,7 @@ async def news_send(message: types.Message):
     except Exception as e:
         logging.error(e)
         await message.reply("/news_send *сообщение*")
+    await Analytics().send(message)
 
 
 @dp.message_handler(commands=['news_send'], is_bot_admin=False, is_private=True)
@@ -397,6 +410,7 @@ async def give_money_no_access(message: types.Message):
 async def give_money_no_access(message: types.Message):
     bot_msg = await message.reply("Недоступно!")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Проверка на пидораса
@@ -404,6 +418,7 @@ async def give_money_no_access(message: types.Message):
 @rate_limit(600, 'fagot_test')
 async def fagot_check(message: types.Message):
     await fagot_(message)
+    await Analytics().send(message)
 
 
 # Проверка на пидораса в привате не работает
@@ -419,6 +434,7 @@ async def fagot_check_private(message: types.Message):
 async def bot_info(message: types.Message):
     bot_msg = await message.reply(config.BOT_INFO)
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Ну и подсказки по боту
@@ -427,6 +443,7 @@ async def bot_info(message: types.Message):
 async def bot_faq(message: types.Message):
     bot_msg = await message.reply(config.BOT_FAQ)
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Испытаем удачу
@@ -457,6 +474,7 @@ async def dice_(message: types.Message):
     else:
         bot_msg = await message.reply("Тебе не повезло. Ничего не выпало... :(")
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Добавим и возможноть посмотреть кто там самый богатый
@@ -474,6 +492,7 @@ async def top_users(message: types.Message):
         Utils().human_format(int(database.PostSQL(message).get_sum_balance))
     ))
     await cleaner_body(bot_msg, message)
+    await Analytics().send(message)
 
 
 # Слушаем группу, и выдаём для группы вознаграждение за актив
