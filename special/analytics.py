@@ -32,8 +32,8 @@ class Analytics:
 
     def build_payload(self, user_id: int, user_lang_code: str, action_name: str) -> dict:
         return {
-            'client_id': user_id,
-            'user_id': user_id,
+            'client_id': str(user_id),
+            'user_id': str(user_id),
             'events': [{
                 'name': action_name,
                 'params': {
