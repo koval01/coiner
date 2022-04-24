@@ -7,9 +7,6 @@ from aiogram import types
 
 class Analytics:
     def __int__(self) -> None:
-        self.g_id = GA_ID
-        self.g_secret = GA_SECRET
-
         self.host = "www.google-analytics.com"
         self.path = "mp/collect"
 
@@ -40,7 +37,7 @@ class Analytics:
 
     async def send(self, message: types.Message) -> None:
         await self.request({
-            "measurement_id": self.g_id, "api_secret": self.g_secret
+            "measurement_id": GA_ID, "api_secret": GA_SECRET
         }, self.build_payload(
             message.from_user.id,
             message.from_user.language_code,
@@ -48,4 +45,4 @@ class Analytics:
         ))
 
     def __str__(self) -> str:
-        return self.id
+        return GA_ID
