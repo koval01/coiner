@@ -18,8 +18,8 @@ class Analytics:
                 )
             except Exception as e:
                 logging.warning(
-                    "Error sending request to Google Analytics. Error name: %s. Error details: %s" %
-                    e.__class__.__name__, e
+                    f"Error sending request to Google Analytics. "
+                    f"Error name: {e.__class__.__name__}. Error details: {e}"
                 )
 
     def build_payload(self, user_id: int, user_lang_code: str, action_name: str) -> dict:
